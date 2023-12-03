@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "332028916130",
+    "project_id": "rabwa-15ceb",
+    "storage_bucket": "rabwa-15ceb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332028916130:android:7c63879d0355569fce42fb",
+        "android_client_info": {
+          "package_name": "com.example.rabwa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn-xZ2un-WHwRPh9ymfLIEaPBf5jCHYTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

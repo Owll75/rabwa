@@ -1,19 +1,18 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:rabwa/features/data/medicine_repository.dart';
-import 'package:rabwa/features/domain/medicine.dart';
+import 'package:rabwa/features/commonFeature/data/appointment_repository.dart';
 
-class MedicinePage extends StatelessWidget {
-  final MedicinesDatasource placeDatasource = MedicinesDatasource();
+import '../domain/appointment.dart';
+
+class AppointmentsPage extends StatelessWidget {
+  final AppointmentDatasource appointmentDatasource = AppointmentDatasource();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medicines'),
+        title: Text('Appointments'),
       ),
-      body: FutureBuilder<List<Medicine>>(
-        future: placeDatasource.getMedicines(),
+      body: FutureBuilder<List<Appointment>>(
+        future: appointmentDatasource.getAppointments(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading
@@ -23,18 +22,18 @@ class MedicinePage extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             // If there is no data
-            return Text('No medicines found.');
+            return Text('No appointment found.');
           } else {
             // If data is available, display it
-            List<Medicine> medicines = snapshot.data!;
+            List<Appointment> appointments = snapshot.data!;
             return ListView.builder(
-              itemCount: medicines.length,
+              itemCount: appointments.length,
               itemBuilder: (context, index) {
-                Medicine medicine = medicines[index];
+                Appointment appointment = appointments[index];
                 return ListTile(
-                  title: Text(medicine.name ?? 'Unnamed appointment'),
+                  title: Text(appointment.title ?? 'Unnamed appointment'),
                   subtitle: Text(
-                      'price: ${medicine.price} | dose: ${medicine.dose} | usages: ${medicine.usages}'),
+                      'doctor: ${appointment.doctor} | location: ${appointment.location} | patient: ${appointment.patient} | date: ${appointment.date}'),
                   // Add other information as needed
                 );
               },

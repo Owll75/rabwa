@@ -1,18 +1,18 @@
 
 import 'package:flutter/material.dart';
-import 'package:rabwa/features/data/patient_repository.dart';
-import 'package:rabwa/features/domain/patient.dart';
+import 'package:rabwa/features/commonFeature/data/doctor_repository.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 
-class PatientPage extends StatelessWidget {
-  final PatientsDatasource patientsDatasourceDatasource = PatientsDatasource();
+class DoctorsPage extends StatelessWidget {
+  final DoctorDatasource doctorDatasourceDatasource = DoctorDatasource();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patients'),
+        title: Text('Doctors'),
       ),
-      body: FutureBuilder<List<Patient>>(
-        future: patientsDatasourceDatasource.getPatients(),
+      body: FutureBuilder<List<Doctor>>(
+        future: doctorDatasourceDatasource.getDoctors(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading
@@ -22,18 +22,18 @@ class PatientPage extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             // If there is no data
-            return Text('No patient found.');
+            return Text('No doctors found.');
           } else {
             // If data is available, display it
-            List<Patient> patients = snapshot.data!;
+            List<Doctor> doctors = snapshot.data!;
             return ListView.builder(
-              itemCount: patients.length,
+              itemCount: doctors.length,
               itemBuilder: (context, index) {
-                Patient patient = patients[index];
+                Doctor doctor = doctors[index];
                 return ListTile(
-                  title: Text(patient.name ?? 'Unnamed patient'),
+                  title: Text(doctor.name ?? 'Unnamed doctor'),
                   subtitle: Text(
-                      'name: ${patient.name} | age: ${patient.age} | weight: ${patient.weight} | hight: ${patient.hight}'),
+                      'name: ${doctor.name} | age: ${doctor.age}'),
                   // Add other information as needed
                 );
               },

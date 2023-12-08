@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rabwa/main.dart';
 
 
 
@@ -9,7 +10,18 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: Text('Home Page'),        actions: [
+          IconButton(
+              icon: Icon(ref.read(themeProvider.notifier).isDark
+                  ? Icons.nightlight_round
+                  : Icons.wb_sunny),
+              onPressed: () {
+                ref.read(themeProvider.notifier).toggleDark();
+                print(
+                    "change theme button");
+              })
+        ],
+
       ),
       body: Center(
         child: Column(

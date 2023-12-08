@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rabwa/features/domain/appointment.dart';
-import 'package:rabwa/features/domain/doctor.dart';
+import 'package:rabwa/features/commonFeature/domain/appointment.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 
 class AppointmentDatasource {
   

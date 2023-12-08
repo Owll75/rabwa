@@ -1,6 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rabwa/features/domain/patient.dart';
+import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
 class PatientsDatasource {
   final CollectionReference PatientsCollection =

@@ -1,18 +1,18 @@
+
 import 'package:flutter/material.dart';
-import 'package:rabwa/features/data/appointment_repository.dart';
+import 'package:rabwa/features/commonFeature/data/patient_repository.dart';
+import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
-import '../domain/appointment.dart';
-
-class AppointmentsPage extends StatelessWidget {
-  final AppointmentDatasource appointmentDatasource = AppointmentDatasource();
+class PatientPage extends StatelessWidget {
+  final PatientsDatasource patientsDatasourceDatasource = PatientsDatasource();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointments'),
+        title: Text('Patients'),
       ),
-      body: FutureBuilder<List<Appointment>>(
-        future: appointmentDatasource.getAppointments(),
+      body: FutureBuilder<List<Patient>>(
+        future: patientsDatasourceDatasource.getPatients(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading
@@ -22,18 +22,18 @@ class AppointmentsPage extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             // If there is no data
-            return Text('No appointment found.');
+            return Text('No patient found.');
           } else {
             // If data is available, display it
-            List<Appointment> appointments = snapshot.data!;
+            List<Patient> patients = snapshot.data!;
             return ListView.builder(
-              itemCount: appointments.length,
+              itemCount: patients.length,
               itemBuilder: (context, index) {
-                Appointment appointment = appointments[index];
+                Patient patient = patients[index];
                 return ListTile(
-                  title: Text(appointment.title ?? 'Unnamed appointment'),
+                  title: Text(patient.name ?? 'Unnamed patient'),
                   subtitle: Text(
-                      'doctor: ${appointment.doctor} | location: ${appointment.location} | patient: ${appointment.patient} | date: ${appointment.date}'),
+                      'name: ${patient.name} | age: ${patient.age} | weight: ${patient.weight} | hight: ${patient.hight}'),
                   // Add other information as needed
                 );
               },

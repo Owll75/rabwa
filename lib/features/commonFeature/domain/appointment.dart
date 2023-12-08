@@ -1,5 +1,5 @@
-import 'package:rabwa/features/domain/doctor.dart';
-import 'package:rabwa/features/domain/patient.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
+import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
 class Appointment {
   String? date;

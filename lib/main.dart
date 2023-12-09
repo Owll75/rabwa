@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Rabwa',
       theme: darkValueModel ? ThemeData.dark() : ThemeData.light(),
-      initialRoute: '/Appointments',
+      // initialRoute: '/Appointments',
       routes: {
         '/Appointments': (context) => AppointmentsPage(),
         '/Medicines': (context) => MedicinePage(),

@@ -3,18 +3,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 import 'package:rabwa/features/commonFeature/presentation/appointments_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/doctors_page.dart';
-import 'package:rabwa/features/commonFeature/presentation/home_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/medicines_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/patients_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/profile_page.dart';
 import 'package:rabwa/theme.dart';
 import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(ProviderScope(child: MyApp()));
-   await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }
@@ -46,7 +46,8 @@ class MyApp extends ConsumerWidget {
 
 class BottomNavigationBarDemo extends StatefulWidget {
   @override
-  _BottomNavigationBarDemoState createState() => _BottomNavigationBarDemoState();
+  _BottomNavigationBarDemoState createState() =>
+      _BottomNavigationBarDemoState();
 }
 
 class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
@@ -77,18 +78,6 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.calendar_today),
-          //   label: 'Appointments',
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.medical_services),
-          //   label: 'Medicines',
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.people),
-          //   label: 'Doctors',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
@@ -96,7 +85,8 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
         ],
         selectedItemColor: Colors.blue, // Customize the selected item color
         unselectedItemColor: Colors.grey, // Customize the unselected item color
-        showUnselectedLabels: true, // Set to false if you don't want to show labels for unselected items
+        showUnselectedLabels:
+            true, // Set to false if you don't want to show labels for unselected items
       ),
     );
   }

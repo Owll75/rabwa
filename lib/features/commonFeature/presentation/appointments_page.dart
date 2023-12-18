@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rabwa/features/commonFeature/presentation/widgets/appointmentCard.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 
+import 'widgets/app_drawer.dart';
+
 final selectedAppointmentProvider = StateProvider<Appointment?>((ref) => null);
 
 class AppointmentsPage extends StatelessWidget {

@@ -1,59 +1,68 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rabwa/main.dart';
 
-
+import '../data/user_repository.dart';
+import '../domain/user.dart';
+import 'widgets/info_card.dart';
+import 'widgets/settings_menu.dart';
 
 class ProfilePage extends ConsumerWidget {
+  final UsersDatasource usersDatasource = UsersDatasource();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),        actions: [
+        title: const Text('Profile'),
+        actions: [
           IconButton(
               icon: Icon(ref.read(themeProvider.notifier).isDark
                   ? Icons.nightlight_round
                   : Icons.wb_sunny),
               onPressed: () {
                 ref.read(themeProvider.notifier).toggleDark();
-                print(
-                    "change theme button");
+                print("change theme button");
               })
         ],
-
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Medicines');
-              },
-              child: Text('Medicines'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Appointments');
-              },
-              child: Text('appointments'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Doctors');
-              },
-              child: Text('doctors'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Patient');
-              },
-              child: Text('patients'),
-            ),
-          ],
-          
-        ),
+      body: FutureBuilder<User?>(
+        future: usersDatasource.getUserByDocId(
+            'XyrunKrrnsgkiRbSdph5dgV5xpM2'), // Replace 'user_id' with the actual user ID
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While data is loading
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // If there's an error
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData) {
+            // If there is no data
+            return const Text('No user found.');
+          } else {
+            // If data is available, display it
+            User? user = snapshot.data;
+            return user != null
+                ? Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 20),
+                        child: InfoCard(
+                          name: user.name,
+                          id: user.id,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: SettingsMenu(user: user),
+                      ),
+                    ],
+                  )
+                : const Text('User not found.');
+          }
+        },
       ),
     );
   }

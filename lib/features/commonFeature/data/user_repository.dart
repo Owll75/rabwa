@@ -7,7 +7,7 @@ class UsersDatasource {
   final CollectionReference UsersCollection =
       FirebaseFirestore.instance.collection('Users');
 
-  Future<User?> getUserByDocId(String docId) async {
+  Future<UserData?> getUserByDocId(String docId) async {
     try {
       // Get a reference to the 'Users' collection
       CollectionReference users =
@@ -22,8 +22,8 @@ class UsersDatasource {
       // Check if the snapshot contains data
       if (snapshot.exists && snapshot.data() != null) {
         // Create a User object from the data
-        User user =
-            User.fromMap(docId, snapshot.data()! as Map<String, dynamic>);
+        UserData user =
+            UserData.fromMap(docId, snapshot.data()! as Map<String, dynamic>);
         return user;
       } else {
         print('No data found for user with ID $docId');
@@ -32,5 +32,14 @@ class UsersDatasource {
       print('Error getting user: $e');
     }
     return null; // Return null if the user is not found or an error occurs
+  }
+
+  Future<void> updateUser(UserData updatedUser) async {
+    try {
+      await UsersCollection.doc(updatedUser.docId).update(updatedUser.toMap());
+      print('User updated successfully');
+    } catch (e) {
+      print('Error updating user: $e');
+    }
   }
 }

@@ -1,25 +1,45 @@
-class User {
+class UserData {
   final String id;
-  final String name;
+  String name;
   final String email;
   final String docId;
+  String phone;
   // Add other fields that you expect to have in your Firestore 'Users' collection
 
-  User({
+  UserData({
     required this.docId,
     required this.id,
     required this.name,
     required this.email,
+    required this.phone,
     // Initialize other fields here
   });
 
-  factory User.fromMap(String id, Map<String, dynamic> data) {
-    return User(
+  setName(String newName) {
+    this.name = newName;
+  }
+
+  setPhone(String newPhone) {
+    this.phone = newPhone;
+  }
+
+  factory UserData.fromMap(String id, Map<String, dynamic> data) {
+    return UserData(
+      phone: data['phone'],
       docId: id,
       id: data['id'],
       name: data['name'],
       email: data['email'],
       // Assign other fields here
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+      'id': id,
+      'phone': phone,
+    };
   }
 }

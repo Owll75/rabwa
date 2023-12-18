@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../domain/user.dart';
 
 class MyAccountPage extends StatelessWidget {
-  final User user;
+  final UserData user;
 
   MyAccountPage({Key? key, required this.user}) : super(key: key);
 

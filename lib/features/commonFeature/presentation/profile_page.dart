@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rabwa/main.dart';
@@ -8,6 +10,9 @@ import 'widgets/info_card.dart';
 import 'widgets/settings_menu.dart';
 
 class ProfilePage extends ConsumerWidget {
+  FirebaseFirestore? instance;
+  User? user = FirebaseAuth.instance.currentUser;
+
   final UsersDatasource usersDatasource = UsersDatasource();
 
   @override
@@ -26,8 +31,9 @@ class ProfilePage extends ConsumerWidget {
               })
         ],
       ),
-      body: FutureBuilder<User?>(
+      body: FutureBuilder<UserData?>(
         future: usersDatasource.getUserByDocId(
+            //user.uid
             'XyrunKrrnsgkiRbSdph5dgV5xpM2'), // Replace 'user_id' with the actual user ID
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,17 +47,14 @@ class ProfilePage extends ConsumerWidget {
             return const Text('No user found.');
           } else {
             // If data is available, display it
-            User? user = snapshot.data;
+            UserData? user = snapshot.data;
             return user != null
                 ? Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 20),
-                        child: InfoCard(
-                          name: user.name,
-                          id: user.id,
-                        ),
+                        child: InfoCard(user: user),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(

@@ -20,7 +20,7 @@ class MedicinesDatasource {
               .get() as QuerySnapshot<Map<String, dynamic>>; // Cast the result
 
       return snapshot.docs
-          .map((doc) => Medicine.fromMap(doc.data()!, doc.id))
+          .map((doc) => Medicine.fromMap(doc.data(), doc.id))
           .toList(); // Use non-null assertion for data
     } catch (e) {
       print('Error fetching medicines for patient: $e');

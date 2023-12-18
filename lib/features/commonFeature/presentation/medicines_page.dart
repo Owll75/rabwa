@@ -18,23 +18,53 @@ class MedicinePage extends StatelessWidget {
         future: medicinesDatasource.getMedicinesForPatient(patientId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text(
-                'No medicines found for the children of this parent.');
+            return const Center(
+                child: Text(
+                    'No medicines found for the children of this parent.'));
           } else {
             List<Medicine> medicines = snapshot.data!;
             return ListView.builder(
               itemCount: medicines.length,
               itemBuilder: (context, index) {
                 Medicine medicine = medicines[index];
-                return ListTile(
-                  title: Text('Name: ${medicine.name}'),
-                  subtitle: Text(
-                      'Dose: ${medicine.dose} - Instructions: ${medicine.instructions}'),
-                  trailing: Text('\$${medicine.price}'),
+                return Card(
+                  elevation: 4.0,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Icon(Icons.medical_services, size: 48),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${medicine.name}',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                  '${medicine.dose}  |  ${medicine.price} SAR'),
+                              SizedBox(height: 4),
+                              Text('Instructions: ${medicine.instructions}'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             );

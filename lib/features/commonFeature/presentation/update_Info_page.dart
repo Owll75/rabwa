@@ -39,10 +39,8 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
   void _submiteForm(String userName, String phone) async {
     widget.userData.setName(userName);
     widget.userData.setPhone(phone);
+    await usersDatasource.updateUser(widget.userData);
 
-    setState(() async {
-      await usersDatasource.updateUser(widget.userData);
-    });
     ScaffoldMessenger.of(lastContext!).showSnackBar(
         const SnackBar(content: Text("Your infromation has been updated")));
     Navigator.of(context).pop();

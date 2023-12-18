@@ -1,4 +1,5 @@
 class Patient {
+  String? docId;
   double hight;
   String parentID;
   String name;
@@ -9,6 +10,7 @@ class Patient {
   Patient(
       {required this.hight,
       required this.age,
+      this.docId,
       required this.parentID,
       required this.name,
       required this.weight,

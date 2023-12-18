@@ -29,12 +29,6 @@ class SettingsMenu extends StatelessWidget {
               },
             ),
             SettingsTile(
-              icon: Icons.medical_services,
-              title: 'Medicines',
-              subtitle: 'View your Medicines',
-              onTap: () => {print("Medicines")},
-            ),
-            SettingsTile(
               icon: Icons.child_care,
               title: 'Children',
               subtitle: 'Manage your linked Children',

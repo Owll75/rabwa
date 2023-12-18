@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../data/patient_repository.dart';
 import '../domain/patient.dart';
+import 'medicines_page.dart';
 
 class ChildrenPage extends StatefulWidget {
   final String parentID;
@@ -57,10 +58,20 @@ class _ChildrenPageState extends State<ChildrenPage> {
                     child: ListTile(
                       leading: const CircleAvatar(
                         radius: 40,
-                        child: Icon(Icons.child_care, size: 30),
+                        child: Icon(Icons.face, size: 30),
                       ),
                       title: Text(patient.name),
                       subtitle: Text("age: ${patient.age}"),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MedicinePage(patientId: patient.docId!),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );

@@ -41,6 +41,7 @@ class PatientsDatasource {
       final List<Patient> patients = snapshot.docs.map((doc) {
         final data = doc.data();
         return Patient(
+          docId: doc.id,
           hight: (data['hight'] ?? 0.0).toDouble(),
           age: data['age'] ?? 0,
           name: data['name'] ?? '',

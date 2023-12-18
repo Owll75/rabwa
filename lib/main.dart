@@ -35,7 +35,7 @@ class MyApp extends ConsumerWidget {
       // initialRoute: '/Appointments',
       routes: {
         '/Appointments': (context) => AppointmentsPage(),
-        '/Medicines': (context) => MedicinePage(),
+        //'/Medicines': (context) => MedicinePage(),
         '/Doctors': (context) => DoctorsPage(),
         '/Patient': (context) => PatientPage(),
       },

@@ -1,41 +1,40 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:rabwa/features/commonFeature/data/medicine_repository.dart';
 import 'package:rabwa/features/commonFeature/domain/medicine.dart';
 
 class MedicinePage extends StatelessWidget {
-  final MedicinesDatasource placeDatasource = MedicinesDatasource();
+  final String patientId;
+  final MedicinesDatasource medicinesDatasource = MedicinesDatasource();
+
+  MedicinePage({Key? key, required this.patientId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medicines'),
+        title: const Text('Medicines for Children'),
       ),
       body: FutureBuilder<List<Medicine>>(
-        future: placeDatasource.getMedicines(),
+        future: medicinesDatasource.getMedicinesForPatient(patientId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // While data is loading
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            // If there's an error
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // If there is no data
-            return Text('No medicines found.');
+            return const Text(
+                'No medicines found for the children of this parent.');
           } else {
-            // If data is available, display it
             List<Medicine> medicines = snapshot.data!;
             return ListView.builder(
               itemCount: medicines.length,
               itemBuilder: (context, index) {
                 Medicine medicine = medicines[index];
                 return ListTile(
-                  title: Text(medicine.name ?? 'Unnamed appointment'),
+                  title: Text('Name: ${medicine.name}'),
                   subtitle: Text(
-                      'price: ${medicine.price} | dose: ${medicine.dose} | usages: ${medicine.usages}'),
-                  // Add other information as needed
+                      'Dose: ${medicine.dose} - Instructions: ${medicine.instructions}'),
+                  trailing: Text('\$${medicine.price}'),
                 );
               },
             );

@@ -1,10 +1,10 @@
 class Patient {
   String? docId;
-  double hight;
-  String parentID;
+  double? hight;
+  String? parentID;
   String name;
-  int age;
-  double weight;
+  int? age;
+  double? weight;
   String? doctor;
 
   Patient(
@@ -24,5 +24,17 @@ class Patient {
       'weight': weight,
       'parent_id': parentID,
     };
+  }
+
+  factory Patient.fromMap(Map<String, dynamic> data, String documentId) {
+    return Patient(
+      name: data['name'],
+      age: data['age'],
+      hight: data['hight'],
+      parentID: data['parent_id'],
+      weight: data['weight'],
+      docId: documentId,
+      doctor: data['doctor_id'],
+    );
   }
 }

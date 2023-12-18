@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
 class PatientsDatasource {
@@ -16,14 +17,38 @@ class PatientsDatasource {
           hight: (data['hight'] ?? 0.0).toDouble(),
           age: data['age'] ?? 0,
           name: data['name'] ?? '',
-          //needs to link with ref
-          // doctor:data['doctor'] ?? '',
+          doctor: data['doctor'] ?? '',
           weight: (data['weight'] ?? 0.0).toDouble(),
         );
       }).toList();
       return patients;
     } catch (e) {
       print('Error fetching patient: $e');
+      return [];
+    }
+  }
+
+  Future<List<Patient>> getMyPatients(String doctorID) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await PatientsCollection.where('doctor_id', isEqualTo: doctorID).get()
+              as QuerySnapshot<Map<String, dynamic>>; // Cast the result
+
+      final List<Patient> patients = snapshot.docs.map((doc) {
+        final data = doc.data();
+        return Patient(
+          docId: doc.id,
+          hight: (data['hight'] ?? 0.0).toDouble(),
+          age: data['age'] ?? 0,
+          name: data['name'] ?? '',
+          doctor: data['doctor'] ?? '',
+          weight: (data['weight'] ?? 0.0).toDouble(),
+          parentID: data['parent_id'],
+        );
+      }).toList();
+      return patients; // Use non-null assertion for data
+    } catch (e) {
+      print('Error fetching  patients: $e');
       return [];
     }
   }

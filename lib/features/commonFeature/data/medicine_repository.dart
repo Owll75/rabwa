@@ -27,27 +27,4 @@ class MedicinesDatasource {
       return [];
     }
   }
-
-  Future<List<Medicine>> getMedicinesForChildren(String parentId) async {
-    List<Medicine> allMedicines = [];
-
-    try {
-      // Explicitly type the snapshot to avoid type mismatch
-      final QuerySnapshot<Map<String, dynamic>> patientsSnapshot =
-          await patientsCollection.where('parent_id', isEqualTo: parentId).get()
-              as QuerySnapshot<Map<String, dynamic>>; // Cast the result
-
-      for (var patientDoc in patientsSnapshot.docs) {
-        final String patientId = patientDoc.id;
-        final List<Medicine> medicines =
-            await getMedicinesForPatient(patientId);
-        allMedicines.addAll(medicines);
-      }
-
-      return allMedicines;
-    } catch (e) {
-      print('Error fetching medicines for children: $e');
-      return [];
-    }
-  }
 }

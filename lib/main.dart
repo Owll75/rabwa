@@ -58,7 +58,7 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
     AppointmentsPage(),
     // MedicinePage(),
     // DoctorsPage(),
-    // PatientPage(),
+    PatientPage(),
     ProfilePage(),
   ];
 
@@ -77,6 +77,10 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'PatientPage',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

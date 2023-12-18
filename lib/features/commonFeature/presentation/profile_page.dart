@@ -33,8 +33,8 @@ class ProfilePage extends ConsumerWidget {
       ),
       body: FutureBuilder<UserData?>(
         future: usersDatasource.getUserByDocId(
-            //user.uid
-            'XyrunKrrnsgkiRbSdph5dgV5xpM2'), // Replace 'user_id' with the actual user ID
+            //user.uid---------------------------------------------------------------------------------------------------
+            'XyrunKrrnsgkiRbSdph5dgV5xpM2'), // Replace this with the actual user ID
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading

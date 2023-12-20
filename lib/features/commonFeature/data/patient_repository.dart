@@ -101,4 +101,41 @@ class PatientsDatasource {
 
     return querySnapshot.docs.isNotEmpty;
   }
+
+  Future<String?> getDocIDPatientById(String id) async {
+    try {
+      print(id);
+      print("-------------------------------------------------");
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection(
+              'Patient') // Ensure this matches your actual collection name
+          .where('id',
+              isEqualTo: id) // 'id' should be the field name in Firestore
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("Document ID: ${querySnapshot.docs.first.id}");
+        print("-------------------------------------------------");
+
+        return querySnapshot.docs.first.id;
+      } else {
+        print("No patient found with ID $id");
+        return null; // Return null if no patient is found
+      }
+    } catch (e) {
+      print('Error fetching patient by ID: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+  Future<void> updatePatientDoctorID(String docId, String doctorDocId) async {
+    try {
+      print("======================-=================UpdatePatientDoctorID");
+      await PatientsCollection.doc(docId).update({'doctor_id': doctorDocId});
+      print('Patient age updated successfully');
+    } catch (e) {
+      print('Error updating patient: $e');
+    }
+  }
 }

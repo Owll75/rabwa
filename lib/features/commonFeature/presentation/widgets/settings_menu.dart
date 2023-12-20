@@ -51,7 +51,7 @@ class SettingsMenu extends StatelessWidget {
               onTap: () {
                 FirebaseAuth.instance.signOut();
 
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                 );

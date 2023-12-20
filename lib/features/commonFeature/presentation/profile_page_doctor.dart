@@ -46,8 +46,6 @@ class ProfilePageDoctor extends ConsumerWidget {
           } else {
             // If data is available, display it
             Doctor? doctor = snapshot.data;
-            print("==============================================");
-            print(doctor);
 
             return user != null
                 ? Column(

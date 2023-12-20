@@ -176,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
         usersDatasource.createUser(newuser);
       }
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
       );

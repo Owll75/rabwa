@@ -139,9 +139,7 @@ class _LoginPageState extends State<LoginPage> {
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
-    setState(() {
-      _isSigning = false;
-    });
+    _isSigning = false;
 
     if (user != null) {
       print("User is successfully signed in");

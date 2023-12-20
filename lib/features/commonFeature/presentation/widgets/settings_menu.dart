@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 
 import '../../domain/user.dart';
 import '../children_page.dart';
@@ -7,8 +10,9 @@ import 'settings_tile.dart';
 
 class SettingsMenu extends StatelessWidget {
   final UserData user;
+  FirebaseFirestore? instance;
 
-  const SettingsMenu({super.key, required this.user});
+  SettingsMenu({super.key, required this.user});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -44,7 +48,14 @@ class SettingsMenu extends StatelessWidget {
               icon: Icons.logout,
               title: 'Log out',
               subtitle: '',
-              onTap: () => {},
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
             ),
           ],
         ).toList(),

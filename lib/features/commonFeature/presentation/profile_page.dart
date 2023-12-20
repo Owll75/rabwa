@@ -31,16 +31,6 @@ class ProfilePage extends ConsumerWidget {
               print("change theme button");
             },
           ),
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-  FirebaseAuth.instance.signOut();
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => LoginPage()),
-  );
-},
-          ),
         ],
       ),
       body: FutureBuilder<UserData?>(

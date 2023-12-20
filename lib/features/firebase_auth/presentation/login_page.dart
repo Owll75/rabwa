@@ -144,11 +144,10 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       print("User is successfully signed in");
-Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  BottomNavigationBarDemo()),
-  );
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
+      );
     } else {
       print("error");
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'appointment_form.dart'; // Make sure this import is correct
+import 'appointment_form.dart'; // Update this import as needed
 import 'package:rabwa/features/commonFeature/data/patient_repository.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
@@ -31,7 +31,7 @@ class _PatientPageState extends State<PatientPage> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No patient found.');
+            return const Text('No patients found.');
           } else {
             List<Patient> patients = snapshot.data!;
             return ListView.builder(

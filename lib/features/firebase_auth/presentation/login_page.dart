@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rabwa/features/commonFeature/data/user_repository.dart';
 import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/sign_up_page.dart';
 import 'package:rabwa/features/firebase_auth/presentation/widgets/formContinter.dart';
@@ -138,16 +139,29 @@ class _LoginPageState extends State<LoginPage> {
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
-    setState(() {
-      _isSigning = false;
-    });
+    _isSigning = false;
 
     if (user != null) {
       print("User is successfully signed in");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
-      );
+      print("------------------------------------------------");
+
+      bool isUser = await UsersDatasource().checkUserExists(user.uid);
+      print(isUser);
+
+      if (isUser) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
+        );
+      }
+      // ignore: use_build_context_synchronously
+
+//
     } else {
       print("error");
     }

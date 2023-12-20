@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
+import 'package:rabwa/features/commonFeature/presentation/patients_page.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 
 import '../../domain/user.dart';
@@ -8,11 +10,11 @@ import '../children_page.dart';
 import '../my_account.dart';
 import 'settings_tile.dart';
 
-class SettingsMenu extends StatelessWidget {
-  final UserData user;
+class SettingsMenuDoctor extends StatelessWidget {
+  final Doctor doctor;
   FirebaseFirestore? instance;
 
-  SettingsMenu({super.key, required this.user});
+  SettingsMenuDoctor({super.key, required this.doctor});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -21,26 +23,13 @@ class SettingsMenu extends StatelessWidget {
           context: context,
           tiles: [
             SettingsTile(
-              icon: Icons.person,
-              title: 'My Account',
-              subtitle: 'View info',
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyAccountPage(user: user)),
-                )
-              },
-            ),
-            SettingsTile(
               icon: Icons.child_care,
-              title: 'Children',
-              subtitle: 'Manage your linked Children',
+              title: 'My Patient',
+              subtitle: 'Manage My Patient',
               onTap: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => ChildrenPage(parentID: user.docId)),
+                  MaterialPageRoute(builder: (context) => PatientPage()),
                 )
               },
             ),

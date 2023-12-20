@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rabwa/features/commonFeature/data/user_repository.dart';
+import 'package:rabwa/features/commonFeature/presentation/profile_page_doctor.dart';
 import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
@@ -46,16 +48,35 @@ class AuthWrapper extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      // User is authenticated, show the main app with bottom navigation
-      return BottomNavigationBarDemo();
+      // User is authenticated, determine if the user is a doctor
+      return FutureBuilder<bool>(
+        future: UsersDatasource()
+            .checkUserExists(user.uid), // Asynchronous operation
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Waiting for the future to complete
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // Handle any errors here
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // Once data is available, show the main app with bottom navigation
+            bool isUser = snapshot.data ?? false;
+            bool isDoctor = !isUser;
+            return BottomNavigationBarDemo();
+          }
+        },
+      );
     } else {
       // User is not authenticated, redirect to the login page
-      return LoginPage();
+      return const LoginPage();
     }
   }
 }
 
 class BottomNavigationBarDemo extends StatefulWidget {
+  BottomNavigationBarDemo({Key? key}) : super(key: key);
+
   @override
   _BottomNavigationBarDemoState createState() =>
       _BottomNavigationBarDemoState();
@@ -64,17 +85,71 @@ class BottomNavigationBarDemo extends StatefulWidget {
 class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    // HomePage(),
-    AppointmentsPage(),
-    // MedicinePage(),
-    // DoctorsPage(),
-    PatientPage(),
-    ProfilePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkIfUserIsDoctor(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else {
+          bool isDoctor = snapshot.data ?? false;
+
+          return _buildScaffold(isDoctor);
+        }
+      },
+    );
+  }
+
+  Future<bool> _checkIfUserIsDoctor() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (await UsersDatasource().checkUserExists(user.uid)) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  Scaffold _buildScaffold(bool isDoctor) {
+    List<Widget> _pages = isDoctor
+        ? [
+            AppointmentsPage(),
+            PatientPage(),
+            ProfilePageDoctor(),
+          ]
+        : [
+            /* Other pages for regular users */ AppointmentsPage(),
+            ProfilePage()
+          ];
+
+    List<BottomNavigationBarItem> _navItems = isDoctor
+        ? [
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today), label: 'Appointments'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person), label: 'Patients'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline), label: 'Profile')
+          ]
+        : [
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today), label: 'Appointments'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline), label: 'Profile'),
+          ];
+
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -84,24 +159,10 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
             _currentIndex = index;
           });
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'PatientPage',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        selectedItemColor: Colors.blue, // Customize the selected item color
-        unselectedItemColor: Colors.grey, // Customize the unselected item color
-        showUnselectedLabels:
-            true, // Set to false if you don't want to show labels for unselected items
+        items: _navItems,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
       ),
     );
   }

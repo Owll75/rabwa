@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rabwa/features/commonFeature/data/doctor_repository.dart';
+import 'package:rabwa/features/commonFeature/data/user_repository.dart';
+import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 import 'package:rabwa/features/commonFeature/domain/user.dart';
 import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
@@ -21,6 +24,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _passwordController = TextEditingController();
 
   bool isSigningUp = false;
+  bool isDoctor = false; // New variable to track if user is a doctor
 
   @override
   void dispose() {
@@ -74,6 +78,22 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 30,
               ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isDoctor,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isDoctor = value ?? false;
+                      });
+                    },
+                  ),
+                  Text("Are you a doctor?")
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
               GestureDetector(
                 onTap: () {
                   _signUp();
@@ -120,9 +140,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         "Login",
                         style: TextStyle(
                             color: Colors.blue, fontWeight: FontWeight.bold),
-                      ))
+                      )),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -140,16 +160,27 @@ class _SignUpPageState extends State<SignUpPage> {
     String password = _passwordController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
-    UserData newuser = UserData(
-        docId: user!.uid,
-        email: email,
-        id: "765432",
-        name: username,
-        phone: "NaN");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
-    );
+
+    if (user != null) {
+      if (isDoctor) {
+        Doctor doctor = Doctor(age: "33", docId: user!.uid, name: username);
+        DoctorDatasource doctorDatasource = DoctorDatasource();
+      } else {
+        UserData newuser = UserData(
+            docId: user!.uid,
+            email: email,
+            id: "765432",
+            name: username,
+            phone: "NaN");
+        UsersDatasource usersDatasource = UsersDatasource();
+        usersDatasource.createUser(newuser);
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
+      );
+    }
     setState(() {
       isSigningUp = false;
     });

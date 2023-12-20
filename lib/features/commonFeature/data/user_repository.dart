@@ -51,4 +51,15 @@ class UsersDatasource {
       print('Error creating user: $e');
     }
   }
+
+  Future<bool> checkUserExists(String docId) async {
+    try {
+      DocumentSnapshot<Object?> snapshot =
+          await UsersCollection.doc(docId).get();
+      return snapshot.exists;
+    } catch (e) {
+      print('Error checking user existence: $e');
+      return false;
+    }
+  }
 }

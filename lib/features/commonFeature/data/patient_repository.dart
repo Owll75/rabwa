@@ -91,4 +91,14 @@ class PatientsDatasource {
       print('Error adding patient: $e');
     }
   }
+
+  Future<bool> doesPatientExistWithParentId(String parentId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Patients')
+        .where('parent_id', isEqualTo: parentId)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
 }

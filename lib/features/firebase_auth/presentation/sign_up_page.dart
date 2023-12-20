@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 import 'package:rabwa/features/firebase_auth/presentation/widgets/formContinter.dart';
+import 'package:rabwa/main.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -73,9 +74,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 30,
               ),
               GestureDetector(
-                onTap:  (){
+                onTap: () {
                   _signUp();
-
                 },
                 child: Container(
                   width: double.infinity,
@@ -85,11 +85,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
-                      child: isSigningUp ? CircularProgressIndicator(color: Colors.white,):Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  )),
+                      child: isSigningUp
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
                 ),
               ),
               SizedBox(
@@ -125,10 +130,9 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
-
-setState(() {
-  isSigningUp = true;
-});
+    setState(() {
+      isSigningUp = true;
+    });
 
     String username = _usernameController.text;
     String email = _emailController.text;
@@ -136,11 +140,11 @@ setState(() {
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  BottomNavigationBarDemo()),
-  );
-setState(() {
-  isSigningUp = false;
-});
+      context,
+      MaterialPageRoute(builder: (context) => BottomNavigationBarDemo()),
+    );
+    setState(() {
+      isSigningUp = false;
+    });
   }
 }

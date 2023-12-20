@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'appointment_form.dart'; // Make sure this import is correct
 import 'package:rabwa/features/commonFeature/data/patient_repository.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
@@ -13,24 +14,19 @@ class PatientPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Patients'),
+        title: const Text('Appointments Requests'),
       ),
       body: FutureBuilder<List<Patient>>(
         future: patientsDatasourceDatasource
-            //.getMyPatients(user.uid)---------------------------------------------------------------------------------------------------
             .getMyPatients("wMF0085bfNUZjgzZRohR0p6rtHt1"),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // While data is loading
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            // If there's an error
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // If there is no data
             return const Text('No patient found.');
           } else {
-            // If data is available, display it
             List<Patient> patients = snapshot.data!;
             return ListView.builder(
               itemCount: patients.length,
@@ -46,13 +42,23 @@ class PatientPage extends StatelessWidget {
                     subtitle: Text(
                       'Age: ${patient.age} | Weight: ${patient.weight} kg | Height: ${patient.hight} cm',
                     ),
-                    // Add other information as needed
                   ),
                 );
               },
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AppointmentForm(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }

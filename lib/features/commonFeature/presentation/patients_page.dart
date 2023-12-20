@@ -5,17 +5,23 @@ import 'appointment_form.dart'; // Update this import as needed
 import 'package:rabwa/features/commonFeature/data/patient_repository.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
 
-class PatientPage extends StatelessWidget {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final User? user = FirebaseAuth.instance.currentUser;
+class PatientPage extends StatefulWidget {
+  @override
+  State<PatientPage> createState() => _PatientPageState();
+}
 
-  PatientPage({Key? key}) : super(key: key);
+class _PatientPageState extends State<PatientPage> {
+  final PatientsDatasource patientsDatasourceDatasource = PatientsDatasource();
+
+  FirebaseFirestore? instance;
+
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appointments Requests'),
+        title: const Text('My Patients'),
       ),
       body: FutureBuilder<List<Patient>>(
         future: patientsDatasourceDatasource.getMyPatients(user!.uid),
@@ -50,55 +56,67 @@ class PatientPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _validateAndNavigate(context),
+        onPressed: () {
+          showAddDialog(context, "add", addToMyPatient);
+        },
         child: const Icon(Icons.add),
         backgroundColor: Colors.blue,
       ),
     );
   }
 
-  void _validateAndNavigate(BuildContext context) async {
-    if (user == null) {
-      _showValidationAlert(context,
-          'You are not logged in. Please log in to add and manage patients.');
-      return;
-    }
-
-    try {
-      var patientDocs = await firestore
-          .collection('Patients')
-          .where('parentID', isEqualTo: user!.uid)
-          .get();
-
-      if (patientDocs.docs.isEmpty) {
-        _showValidationAlert(context,
-            'You have not added any children yet. Please add your children to proceed.');
-      } else if (patientDocs.docs.any((doc) =>
-          doc.data()['docid'] == null || doc.data()['docid'].isEmpty)) {
-        _showValidationAlert(
-            context, 'A doctor has not been assigned to any of your children.');
-      } else {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => AppointmentForm()));
-      }
-    } catch (e) {
-      _showValidationAlert(
-          context, 'An error occurred while retrieving patient data: $e');
-    }
+  addToMyPatient(String id) async {
+    String? patientDocID =
+        await patientsDatasourceDatasource.getDocIDPatientById(id);
+    if (patientDocID != null)
+      patientsDatasourceDatasource.updatePatientDoctorID(
+          patientDocID, user!.uid);
+    setState(() {
+      // This will trigger a rebuild of the widget, so it can reflect the updated data
+    });
   }
 
-  void _showValidationAlert(BuildContext context, String message) {
+  void showAddDialog(
+      BuildContext context, String actionLabel, Function(String) onAddAction) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    String inputId = '';
+
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Validation Error'),
-          content: Text(message),
+          title: Text("Add $actionLabel"),
+          content: Form(
+            key: _formKey,
+            child: TextFormField(
+              decoration: InputDecoration(labelText: '$actionLabel ID'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an ID';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                inputId = value!;
+              },
+            ),
+          ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: const Text('Add'),
               onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss the dialog
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  // Call the provided action with the input ID
+                  onAddAction(inputId);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ],

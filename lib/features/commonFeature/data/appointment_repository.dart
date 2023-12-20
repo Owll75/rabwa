@@ -10,10 +10,23 @@ class AppointmentsDatasource {
       final QuerySnapshot<Object?> snapshot =
           await appointmentsCollection.get();
 
+<<<<<<< HEAD
       return snapshot.docs
           .map((doc) => Appointment.fromMap(
               doc.data() as Map<String, dynamic>? ?? {}, doc.id))
           .toList();
+=======
+      final List<Appointment> appointments = snapshot.docs.map((doc) {
+        final data = doc.data();
+
+        return Appointment(
+            date: data['date'] ?? '',
+            location: data['location'] ?? '',
+            time: data['time'] ?? '',
+            title: (data['title'] ?? ''));
+      }).toList();
+      return appointments;
+>>>>>>> 68d1d1f9e0c3960219486362db867f19af843631
     } catch (e) {
       print('Error fetching appointments: $e');
       return [];

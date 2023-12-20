@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
@@ -85,8 +87,17 @@ class PatientsDatasource {
 
   Future<void> addPatient(Patient patient) async {
     try {
-      await PatientsCollection.add(patient.toMap());
-      print('Patient added successfully');
+      // Generate a unique ID starting from 10000
+      int uniqueId = 10000 + Random().nextInt(90000); // Random number between 10000 and 99999
+
+      // Add the unique ID to the patient data
+      Map<String, dynamic> patientData = patient.toMap();
+      patientData['id'] = uniqueId;
+
+      // Use the custom ID when adding the patient to the collection
+      await PatientsCollection.doc(uniqueId.toString()).set(patientData);
+      
+      print('Patient added successfully with ID: $uniqueId');
     } catch (e) {
       print('Error adding patient: $e');
     }
@@ -100,5 +111,42 @@ class PatientsDatasource {
         .get();
 
     return querySnapshot.docs.isNotEmpty;
+  }
+
+  Future<String?> getDocIDPatientById(String id) async {
+    try {
+      print(id);
+      print("-------------------------------------------------");
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection(
+              'Patient') // Ensure this matches your actual collection name
+          .where('id',
+              isEqualTo: id) // 'id' should be the field name in Firestore
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("Document ID: ${querySnapshot.docs.first.id}");
+        print("-------------------------------------------------");
+
+        return querySnapshot.docs.first.id;
+      } else {
+        print("No patient found with ID $id");
+        return null; // Return null if no patient is found
+      }
+    } catch (e) {
+      print('Error fetching patient by ID: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+  Future<void> updatePatientDoctorID(String docId, String doctorDocId) async {
+    try {
+      print("======================-=================UpdatePatientDoctorID");
+      await PatientsCollection.doc(docId).update({'doctor_id': doctorDocId});
+      print('Patient age updated successfully');
+    } catch (e) {
+      print('Error updating patient: $e');
+    }
   }
 }

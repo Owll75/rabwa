@@ -22,4 +22,13 @@ class DoctorDatasource {
       return [];
     }
   }
+
+  Future<void> createDoctor(Doctor doctor) async {
+    try {
+      await DoctorsCollection.doc(doctor.docId).set(doctor.toMap());
+      print('Doctor created successfully with ID: ${doctor.docId}');
+    } catch (e) {
+      print('Error creating doctor: $e');
+    }
+  }
 }

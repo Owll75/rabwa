@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
+import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 import 'package:rabwa/features/commonFeature/presentation/appointments_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/doctors_page.dart';
@@ -12,11 +15,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
-  runApp(ProviderScope(child: MyApp()));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 final themeProvider = StateNotifierProvider<RiverThemeDarkModel, bool>(
@@ -33,14 +35,23 @@ class MyApp extends ConsumerWidget {
       title: 'Rabwa',
       theme: darkValueModel ? ThemeData.dark() : ThemeData.light(),
       // initialRoute: '/Appointments',
-      routes: {
-        '/Appointments': (context) => AppointmentsPage(),
-        //'/Medicines': (context) => MedicinePage(),
-        '/Doctors': (context) => DoctorsPage(),
-        '/Patient': (context) => PatientPage(),
-      },
-      home: BottomNavigationBarDemo(),
+      home: AuthWrapper(),
     );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // User is authenticated, show the main app with bottom navigation
+      return BottomNavigationBarDemo();
+    } else {
+      // User is not authenticated, redirect to the login page
+      return LoginPage();
+    }
   }
 }
 

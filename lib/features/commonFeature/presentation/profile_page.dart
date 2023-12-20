@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rabwa/main.dart';
-
+import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
+import '../../firebase_auth/presentation/login_page.dart';
 import '../data/user_repository.dart';
 import '../domain/user.dart';
 import 'widgets/info_card.dart';
@@ -22,19 +23,28 @@ class ProfilePage extends ConsumerWidget {
         title: const Text('Profile'),
         actions: [
           IconButton(
-              icon: Icon(ref.read(themeProvider.notifier).isDark
-                  ? Icons.nightlight_round
-                  : Icons.wb_sunny),
-              onPressed: () {
-                ref.read(themeProvider.notifier).toggleDark();
-                print("change theme button");
-              })
+            icon: Icon(ref.read(themeProvider.notifier).isDark
+                ? Icons.nightlight_round
+                : Icons.wb_sunny),
+            onPressed: () {
+              ref.read(themeProvider.notifier).toggleDark();
+              print("change theme button");
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+  FirebaseAuth.instance.signOut();
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => LoginPage()),
+  );
+},
+          ),
         ],
       ),
       body: FutureBuilder<UserData?>(
-        future: usersDatasource.getUserByDocId(
-            //user.uid---------------------------------------------------------------------------------------------------
-            'XyrunKrrnsgkiRbSdph5dgV5xpM2'), // Replace this with the actual user ID
+        future: usersDatasource.getUserByDocId(user?.uid ?? ''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading
@@ -61,6 +71,8 @@ class ProfilePage extends ConsumerWidget {
                             vertical: 10, horizontal: 20),
                         child: SettingsMenu(user: user),
                       ),
+                      // Display user ID
+                      Text('User ID: ${user.id}'),
                     ],
                   )
                 : const Text('User not found.');

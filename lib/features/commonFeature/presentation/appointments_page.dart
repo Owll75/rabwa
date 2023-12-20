@@ -9,7 +9,7 @@ import 'widgets/app_drawer.dart';
 final selectedAppointmentProvider = StateProvider<Appointment?>((ref) => null);
 
 class AppointmentsPage extends StatelessWidget {
-  final AppointmentDatasource appointmentDatasource = AppointmentDatasource();
+  final AppointmentsDatasource appointmentDatasource = AppointmentsDatasource();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

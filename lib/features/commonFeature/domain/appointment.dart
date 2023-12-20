@@ -1,20 +1,20 @@
-import 'package:rabwa/features/commonFeature/domain/doctor.dart';
-import 'package:rabwa/features/commonFeature/domain/patient.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Appointment {
-  String? submit_date;
-  String? appointment_date;
-  Doctor? doctor_id;
+  String id;
+  DateTime? submitDate;
+  DateTime? appointmentDate;
+  String? doctorId;
   String? location;
-  Patient? patient_id;
+  String? patientId;
   String? time;
   String? title;
-  String? parent_name;
-  String? patient_name;
-  String? patient_age;
-  String? patient_gender;
-  String? patient_weight;
-  String? patient_height;
+  String? parentName;
+  String? patientName;
+  int? patientAge;
+  String? patientGender;
+  double? patientWeight;
+  double? patientHeight;
   String? ac1;
   String? ac2;
   String? ac3;
@@ -25,19 +25,20 @@ class Appointment {
   bool? active;
 
   Appointment({
-    this.submit_date,
-    this.appointment_date,
-    this.doctor_id,
+    this.id = '',
+    this.submitDate,
+    this.appointmentDate,
+    this.doctorId,
     this.location,
-    this.patient_id,
+    this.patientId,
     this.time,
     this.title,
-    this.parent_name,
-    this.patient_name,
-    this.patient_age,
-    this.patient_gender,
-    this.patient_weight,
-    this.patient_height,
+    this.parentName,
+    this.patientName,
+    this.patientAge,
+    this.patientGender,
+    this.patientWeight,
+    this.patientHeight,
     this.ac1,
     this.ac2,
     this.ac3,
@@ -45,5 +46,59 @@ class Appointment {
     this.ac5,
     this.ac6,
     this.report,
+    this.active,
   });
+
+  factory Appointment.fromMap(Map<String, dynamic> map, String id) {
+    return Appointment(
+      id: id,
+      submitDate: (map['submit_date'] as Timestamp?)?.toDate(),
+      appointmentDate: (map['appointment_date'] as Timestamp?)?.toDate(),
+      doctorId: map['doctor_id'] as String?,
+      location: map['location'] as String?,
+      patientId: map['patient_id'] as String?,
+      time: map['time'] as String?,
+      title: map['title'] as String?,
+      parentName: map['parent_name'] as String?,
+      patientName: map['patient_name'] as String?,
+      patientAge: map['patient_age'] as int?,
+      patientGender: map['patient_gender'] as String?,
+      patientWeight: (map['patient_weight'] as num?)?.toDouble(),
+      patientHeight: (map['patient_height'] as num?)?.toDouble(),
+      ac1: map['ac1'] as String?,
+      ac2: map['ac2'] as String?,
+      ac3: map['ac3'] as String?,
+      ac4: map['ac4'] as String?,
+      ac5: map['ac5'] as String?,
+      ac6: map['ac6'] as String?,
+      report: map['report'] as String?,
+      active: map['active'] as bool?,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'submit_date': Timestamp.fromDate(submitDate ?? DateTime.now()),
+      'appointment_date': Timestamp.fromDate(appointmentDate ?? DateTime.now()),
+      'doctor_id': doctorId,
+      'location': location,
+      'patient_id': patientId,
+      'time': time,
+      'title': title,
+      'parent_name': parentName,
+      'patient_name': patientName,
+      'patient_age': patientAge,
+      'patient_gender': patientGender,
+      'patient_weight': patientWeight,
+      'patient_height': patientHeight,
+      'ac1': ac1,
+      'ac2': ac2,
+      'ac3': ac3,
+      'ac4': ac4,
+      'ac5': ac5,
+      'ac6': ac6,
+      'report': report,
+      'active': active,
+    };
+  }
 }

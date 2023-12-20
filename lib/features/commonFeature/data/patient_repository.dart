@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rabwa/features/commonFeature/domain/doctor.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
@@ -85,8 +87,17 @@ class PatientsDatasource {
 
   Future<void> addPatient(Patient patient) async {
     try {
-      await PatientsCollection.add(patient.toMap());
-      print('Patient added successfully');
+      // Generate a unique ID starting from 10000
+      int uniqueId = 10000 + Random().nextInt(90000); // Random number between 10000 and 99999
+
+      // Add the unique ID to the patient data
+      Map<String, dynamic> patientData = patient.toMap();
+      patientData['id'] = uniqueId;
+
+      // Use the custom ID when adding the patient to the collection
+      await PatientsCollection.doc(uniqueId.toString()).set(patientData);
+      
+      print('Patient added successfully with ID: $uniqueId');
     } catch (e) {
       print('Error adding patient: $e');
     }

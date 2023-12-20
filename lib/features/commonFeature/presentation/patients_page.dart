@@ -8,7 +8,7 @@ import 'package:rabwa/features/commonFeature/domain/patient.dart';
 class PatientPage extends StatelessWidget {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final User? user = FirebaseAuth.instance.currentUser;
-
+  PatientsDatasource patientsDatasourceDatasource = new PatientsDatasource();
   PatientPage({Key? key}) : super(key: key);
 
   @override

@@ -1,6 +1,6 @@
 class Doctor {
   String? name;
-  int? age;
+  String? age;
   String? docId;
 
   Doctor({
@@ -15,5 +15,13 @@ class Doctor {
       'docId': docId,
       'age': age,
     };
+  }
+
+  factory Doctor.fromMap(Map<String, dynamic> map) {
+    return Doctor(
+      name: map['name'],
+      docId: map['docId'],
+      age: map['age'],
+    );
   }
 }

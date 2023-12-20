@@ -163,7 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (user != null) {
       if (isDoctor) {
-        Doctor doctor = Doctor(age: 33, docId: user!.uid, name: username);
+        Doctor doctor = Doctor(age: "33", docId: user!.uid, name: username);
         DoctorDatasource doctorDatasource = DoctorDatasource();
       } else {
         UserData newuser = UserData(

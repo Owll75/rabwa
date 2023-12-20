@@ -17,8 +17,7 @@ class PatientPage extends StatelessWidget {
         title: const Text('Appointments Requests'),
       ),
       body: FutureBuilder<List<Patient>>(
-        future: patientsDatasourceDatasource
-            .getMyPatients("wMF0085bfNUZjgzZRohR0p6rtHt1"),
+        future: patientsDatasourceDatasource.getMyPatients(user!.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();

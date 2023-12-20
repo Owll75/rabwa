@@ -31,4 +31,30 @@ class DoctorDatasource {
       print('Error creating doctor: $e');
     }
   }
+
+  Future<Doctor?> getDoctorByDocId(String docId) async {
+    try {
+      // Get a reference to the 'Users' collection
+      CollectionReference doctors =
+          FirebaseFirestore.instance.collection('Doctors');
+
+      // Get the document reference by the specific document ID
+      DocumentReference userDoc = doctors.doc(docId);
+
+      // Get the document snapshot
+      DocumentSnapshot<Object?> snapshot = await userDoc.get();
+
+      // Check if the snapshot contains data
+      if (snapshot.exists && snapshot.data() != null) {
+        // Create a User object from the data
+        Doctor doctor = Doctor.fromMap(snapshot.data() as Map<String, dynamic>);
+        return doctor;
+      } else {
+        print('No data found for user with ID $docId');
+      }
+    } catch (e) {
+      print('Error getting user: $e');
+    }
+    return null; // Return null if the user is not found or an error occurs
+  }
 }

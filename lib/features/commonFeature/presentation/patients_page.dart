@@ -40,7 +40,7 @@ class PatientPage extends StatelessWidget {
                     ),
                     title: Text(patient.name ?? 'Unnamed patient'),
                     subtitle: Text(
-                      'Age: ${patient.age} | Weight: ${patient.weight} kg | Height: ${patient.hight} cm',
+                      'Age: ${patient.age} | Weight: ${patient.weight} kg | Height: ${patient.height} cm',
                     ),
                   ),
                 );

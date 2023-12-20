@@ -42,4 +42,13 @@ class UsersDatasource {
       print('Error updating user: $e');
     }
   }
+
+  Future<void> createUser(UserData newUser) async {
+    try {
+      await UsersCollection.doc(newUser.docId).set(newUser.toMap());
+      print('User created successfully with ID: ${newUser.docId}');
+    } catch (e) {
+      print('Error creating user: $e');
+    }
+  }
 }

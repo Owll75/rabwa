@@ -70,7 +70,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Asthma Assessment Form'),
+        title: Text('Appointment Assesement'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

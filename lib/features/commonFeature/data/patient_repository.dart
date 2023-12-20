@@ -14,7 +14,7 @@ class PatientsDatasource {
         final data = doc.data();
         return Patient(
           parentID: data['parent_id'],
-          hight: (data['hight'] ?? 0.0).toDouble(),
+          height: (data['height'] ?? 0.0).toDouble(),
           age: data['age'] ?? 0,
           name: data['name'] ?? '',
           doctor: data['doctor'] ?? '',
@@ -38,7 +38,7 @@ class PatientsDatasource {
         final data = doc.data();
         return Patient(
           docId: doc.id,
-          hight: (data['hight'] ?? 0.0).toDouble(),
+          height: (data['height'] ?? 0.0).toDouble(),
           age: data['age'] ?? 0,
           name: data['name'] ?? '',
           doctor: data['doctor'] ?? '',
@@ -67,7 +67,7 @@ class PatientsDatasource {
         final data = doc.data();
         return Patient(
           docId: doc.id,
-          hight: (data['hight'] ?? 0.0).toDouble(),
+          height: (data['height'] ?? 0.0).toDouble(),
           age: data['age'] ?? 0,
           name: data['name'] ?? '',
           //needs to link with ref
@@ -90,5 +90,15 @@ class PatientsDatasource {
     } catch (e) {
       print('Error adding patient: $e');
     }
+  }
+
+  Future<bool> doesPatientExistWithParentId(String parentId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Patients')
+        .where('parent_id', isEqualTo: parentId)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
   }
 }

@@ -166,7 +166,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                   // Example: addPatient(name, age, height, weight);
                   Patient newPatient = Patient(
                       age: age,
-                      hight: height,
+                      height: height,
                       name: name,
                       weight: weight,
                       parentID: parentID);

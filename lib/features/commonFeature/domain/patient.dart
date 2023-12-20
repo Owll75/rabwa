@@ -1,14 +1,14 @@
 class Patient {
+  String? doctor;
   String? docId;
-  double? hight;
   String? parentID;
   String name;
   int? age;
   double? weight;
-  String? doctor;
+  double? height;
 
   Patient(
-      {required this.hight,
+      {required this.height,
       required this.age,
       this.docId,
       required this.parentID,
@@ -18,7 +18,7 @@ class Patient {
 
   Map<String, dynamic> toMap() {
     return {
-      'hight': hight,
+      'height': height,
       'age': age,
       'name': name,
       'weight': weight,
@@ -30,7 +30,7 @@ class Patient {
     return Patient(
       name: data['name'],
       age: data['age'],
-      hight: data['hight'],
+      height: data['hight'],
       parentID: data['parent_id'],
       weight: data['weight'],
       docId: documentId,

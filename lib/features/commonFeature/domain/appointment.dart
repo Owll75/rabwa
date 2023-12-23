@@ -106,4 +106,41 @@ class Appointment {
       'active': active,
     };
   }
+  int calculateAsthmaControlScore() {
+    int score = 0;
+    score += ac1 == "Yes" ? 1 : 0;
+    score += ac2 == "Yes" ? 1 : 0;
+    score += ac3 == "Yes" ? 1 : 0;
+    score += ac4 == "Yes" ? 1 : 0;
+    return score;
+  }
+
+  String getAsthmaControlLevel() {
+    int score = calculateAsthmaControlScore();
+    if (score == 0) {
+      return 'Controlled';
+    } else if (score > 0 && score <= 2) {
+      return 'Partially Controlled';
+    } else {
+      return 'Uncontrolled';
+    }
+  }
+
+  bool shouldContinueSurvey() {
+    int score = calculateAsthmaControlScore();
+    return score >= 3;
+  }
+
+  String getQuestionsAnswered() {
+    List<String> questionsAnswered = [];
+    if (ac1 == "Yes") questionsAnswered.add("AC1: Yes");
+    if (ac2 == "Yes") questionsAnswered.add("AC2: Yes");
+    if (ac3 == "Yes") questionsAnswered.add("AC3: Yes");
+    if (ac4 == "Yes") questionsAnswered.add("AC4: Yes");
+    if (shouldContinueSurvey()) {
+      if (ac5 != null) questionsAnswered.add("AC5: $ac5");
+      if (ac6 != null) questionsAnswered.add("AC6: $ac6");
+    }
+    return questionsAnswered.join('\n');
+  }
 }

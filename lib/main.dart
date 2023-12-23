@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rabwa/features/commonFeature/data/user_repository.dart';
+import 'package:rabwa/features/commonFeature/presentation/appointment_req.dart';
 import 'package:rabwa/features/commonFeature/presentation/profile_page_doctor.dart';
 import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
@@ -132,7 +133,9 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
           ]
         : [
             /* Other pages for regular users */ AppointmentsPage(),
+            AppointmentreqPage(),
             ProfilePage()
+
           ];
 
     List<BottomNavigationBarItem> _navItems = isDoctor
@@ -147,6 +150,7 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
         : [
             const BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_today), label: 'Appointments'),
+            const BottomNavigationBarItem( icon: Icon(Icons.add), label: 'New Appointment'),
             const BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline), label: 'Profile'),
           ];

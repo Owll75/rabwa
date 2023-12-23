@@ -27,7 +27,7 @@ class _PatientPageState extends State<PatientPage> {
         future: patientsDatasourceDatasource.getMyPatients(user!.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -42,12 +42,50 @@ class _PatientPageState extends State<PatientPage> {
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     leading: CircleAvatar(
-                      child: Text(patient.name![0]),
+                      child: Text(patient.name![0]), // Assuming patient name is not null here
                     ),
                     title: Text(patient.name ?? 'Unnamed patient'),
                     subtitle: Text(
                       'Age: ${patient.age} | Weight: ${patient.weight} kg | Height: ${patient.height} cm',
                     ),
+                    onTap: () async {
+                      // Assuming patient ID is stored in patient.docId
+                      // You need to ensure the patient ID is passed correctly here
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          // Use FutureBuilder to wait for the async operation to complete
+                          return FutureBuilder<RichText>(
+                            future: patientsDatasourceDatasource.reviewAppointmentDetails(patient.docId!),
+                            builder: (BuildContext context, AsyncSnapshot<RichText> snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return AlertDialog(
+                                  content: SizedBox(
+                                    height: 100,
+                                    child: Center(child: CircularProgressIndicator()),
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                return AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text('Could not load details: ${snapshot.error}'),
+                                );
+                              } else if (snapshot.hasData) {
+                                return AlertDialog(
+                                  title: Text('Appointment Details'),
+                                  content: SingleChildScrollView(child: snapshot.data!),
+                                );
+                              } else {
+                                return AlertDialog(
+                                  title: Text('No Data'),
+                                  content: Text('No details are available for this patient.'),
+                                );
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
                   ),
                 );
               },
@@ -75,6 +113,8 @@ class _PatientPageState extends State<PatientPage> {
       // This will trigger a rebuild of the widget, so it can reflect the updated data
     });
   }
+}
+
 
   void showAddDialog(
       BuildContext context, String actionLabel, Function(String) onAddAction) {
@@ -124,4 +164,3 @@ class _PatientPageState extends State<PatientPage> {
       },
     );
   }
-}

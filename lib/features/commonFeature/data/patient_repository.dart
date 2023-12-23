@@ -1,12 +1,20 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rabwa/features/commonFeature/domain/doctor.dart';
+import 'package:flutter/material.dart';
+import 'package:rabwa/features/commonFeature/domain/medicine.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
+import 'package:rabwa/features/commonFeature/domain/appointment.dart';
+
+
 
 class PatientsDatasource {
   final CollectionReference PatientsCollection =
       FirebaseFirestore.instance.collection('Patient');
+  final CollectionReference appointmentsCollection =
+    FirebaseFirestore.instance.collection('Appointment');
+  final CollectionReference medicinesCollection =
+    FirebaseFirestore.instance.collection('Medicine');
+
   Future<List<Patient>> getPatients() async {
     try {
       final QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -147,6 +155,74 @@ class PatientsDatasource {
       print('Patient age updated successfully');
     } catch (e) {
       print('Error updating patient: $e');
+    }
+  }
+  Future<RichText> reviewAppointmentDetails(String patientId) async {
+    try {
+      // Fetch the appointment details
+      final QuerySnapshot<Map<String, dynamic>> appointmentSnapshot = await FirebaseFirestore
+          .instance
+          .collection('Appointments')
+          .where('patient_id', isEqualTo: patientId)
+          .limit(1)
+          .get();
+
+      if (appointmentSnapshot.docs.isEmpty) {
+        throw Exception("Appointment for this patient is not found");
+      }
+
+      final Appointment appointment = Appointment.fromMap(appointmentSnapshot.docs.first.data() as Map<String, dynamic>, appointmentSnapshot.docs.first.id);
+
+      final QuerySnapshot medicineSnapshot = await medicinesCollection.where('patient_id', isEqualTo: appointment.patientId).get();
+      final List<Medicine> medicines = medicineSnapshot.docs.map((doc) => Medicine.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+
+      String medicationDetails = medicines.map((med) => "${med.name} (${med.dose})").join(", ");
+      String asthmaControlLevel = appointment.getAsthmaControlLevel();
+      String questionsAnsweredYes = appointment.getQuestionsAnswered();
+
+      return RichText(
+        text: TextSpan(
+          style: TextStyle(fontSize: 14, color: Colors.black),
+          children: <TextSpan>[
+            TextSpan(
+              text: '${appointment.patientAge} year old ${appointment.patientGender} patient, known case of asthma, currently on $medicationDetails.',
+            ),
+            TextSpan(
+              text: '\n\nFollowing up for asthma assessment and management.\n',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: questionsAnsweredYes,
+            ),
+            TextSpan(
+              text: '\n\nAssessment:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: ' $asthmaControlLevel asthma',
+            ),
+            TextSpan(
+              text: '\n\nPlan:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: ' - As per the guidelines\n',
+            ),
+            // Here you would include additional details as needed
+            // For example, location, time of appointment, doctor's notes, etc.
+            // These details would need to be part of the Appointment object or retrieved from the database
+          ],
+        ),
+      );
+    } catch (e) {
+      print('Error reviewing appointment details: $e');
+      // Handle the error state, perhaps return an error widget
+      return RichText(
+        text: TextSpan(
+          text: 'Error: Could not load appointment details.',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
     }
   }
 }

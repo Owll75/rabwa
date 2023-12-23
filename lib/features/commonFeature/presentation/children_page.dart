@@ -61,7 +61,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                         child: Icon(Icons.face, size: 30),
                       ),
                       title: Text(patient.name),
-                      subtitle: Text("age: ${patient.age}"),
+                      subtitle: Text("Age: ${patient.age} \nID: ${patient.docId}"),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         Navigator.push(

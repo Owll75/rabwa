@@ -12,7 +12,7 @@ import 'widgets/settings_menu.dart';
 
 class ProfilePage extends ConsumerWidget {
   FirebaseFirestore? instance;
-  User? user = FirebaseAuth.instance.currentUser;
+  User? userID = FirebaseAuth.instance.currentUser;
 
   final UsersDatasource usersDatasource = UsersDatasource();
 
@@ -34,7 +34,7 @@ class ProfilePage extends ConsumerWidget {
         ],
       ),
       body: FutureBuilder<UserData?>(
-        future: usersDatasource.getUserByDocId(user?.uid ?? ''),
+        future: usersDatasource.getUserByDocId(userID?.uid ?? ''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While data is loading
@@ -62,7 +62,7 @@ class ProfilePage extends ConsumerWidget {
                         child: SettingsMenu(user: user),
                       ),
                       // Display user ID
-                      Text('User ID: ${user.id}'),
+                      Text('User ID: ${user?.id}'),
                     ],
                   )
                 : const Text('User not found.');

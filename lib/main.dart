@@ -36,6 +36,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Rabwa',
       theme: darkValueModel ? ThemeData.dark() : ThemeData.light(),
+      debugShowCheckedModeBanner: false,
       // initialRoute: '/Appointments',
       home: AuthWrapper(),
     );

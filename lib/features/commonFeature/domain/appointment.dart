@@ -10,6 +10,7 @@ class Appointment {
   String? time;
   String? title;
   String? parentName;
+  String? parentId;
   String? patientName;
   int? patientAge;
   String? patientGender;
@@ -24,30 +25,30 @@ class Appointment {
   String? report;
   bool? active;
 
-  Appointment({
-    this.id = '',
-    this.submitDate,
-    this.appointmentDate,
-    this.doctorId,
-    this.location,
-    this.patientId,
-    this.time,
-    this.title,
-    this.parentName,
-    this.patientName,
-    this.patientAge,
-    this.patientGender,
-    this.patientWeight,
-    this.patientHeight,
-    this.ac1,
-    this.ac2,
-    this.ac3,
-    this.ac4,
-    this.ac5,
-    this.ac6,
-    this.report,
-    this.active,
-  });
+  Appointment(
+      {this.id = '',
+      this.submitDate,
+      this.appointmentDate,
+      this.doctorId,
+      this.location,
+      this.patientId,
+      this.time,
+      this.title,
+      this.parentName,
+      this.patientName,
+      this.patientAge,
+      this.patientGender,
+      this.patientWeight,
+      this.patientHeight,
+      this.ac1,
+      this.ac2,
+      this.ac3,
+      this.ac4,
+      this.ac5,
+      this.ac6,
+      this.report,
+      this.active,
+      this.parentId});
 
   factory Appointment.fromMap(Map<String, dynamic> map, String id) {
     return Appointment(
@@ -57,6 +58,7 @@ class Appointment {
       doctorId: map['doctor_id'] as String?,
       location: map['location'] as String?,
       patientId: map['patient_id'] as String?,
+      parentId: map['perent_id'] as String?,
       time: map['time'] as String?,
       title: map['title'] as String?,
       parentName: map['parent_name'] as String?,
@@ -74,6 +76,9 @@ class Appointment {
       report: map['report'] as String?,
       active: map['active'] as bool?,
     );
+  }
+  void addParentID(String newParentID) {
+    this.parentId = newParentID;
   }
 
   Map<String, dynamic> toMap() {

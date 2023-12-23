@@ -21,7 +21,7 @@ class AppointmentCard extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: ListTile(
           title: Text(
-            'Doctor: ${appointmentData.doctorId}',
+            'Doctor: ${appointmentData.doctorId ?? 'dr xxxxx'}',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class AppointmentCard extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                'Date: ${appointmentData.appointmentDate}, Time: ${appointmentData.time}',
+                'Date: ${appointmentData.appointmentDate}',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey, // Modern color

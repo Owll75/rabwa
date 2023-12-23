@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rabwa/features/commonFeature/data/appointment_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ final selectedAppointmentProvider = StateProvider<Appointment?>((ref) => null);
 
 class AppointmentsPage extends StatelessWidget {
   final AppointmentsDatasource appointmentDatasource = AppointmentsDatasource();
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class AppointmentsPage extends StatelessWidget {
         title: Text('Appointments'),
       ),
       body: FutureBuilder<List<Appointment>>(
-        future: appointmentDatasource.getAppointments(),
+        future: appointmentDatasource.getAppointmentsByParentId(user?.uid ?? ""),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();

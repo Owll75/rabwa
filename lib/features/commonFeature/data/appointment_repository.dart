@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 
 class AppointmentsDatasource {
   final CollectionReference appointmentsCollection =
       FirebaseFirestore.instance.collection('Appointments');
-
+  User? userID = FirebaseAuth.instance.currentUser;
   Future<List<Appointment>> getAppointments() async {
     try {
       final QuerySnapshot<Object?> snapshot =
@@ -39,7 +40,7 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('parent_id', isEqualTo: parentId)
+          .where('perent_id', isEqualTo: parentId)
           .get();
 
       return snapshot.docs
@@ -54,6 +55,7 @@ class AppointmentsDatasource {
 
   Future<void> addAppointment(Appointment appointment) async {
     try {
+      appointment.addParentID(userID?.uid ?? "");
       await appointmentsCollection.add(appointment.toMap());
       print('Appointment added successfully');
     } catch (e) {

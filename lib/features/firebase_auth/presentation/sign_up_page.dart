@@ -165,6 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (isDoctor) {
         Doctor doctor = Doctor(age: "33", docId: user!.uid, name: username);
         DoctorDatasource doctorDatasource = DoctorDatasource();
+        doctorDatasource.createDoctor(doctor);
       } else {
         UserData newuser = UserData(
             docId: user!.uid,

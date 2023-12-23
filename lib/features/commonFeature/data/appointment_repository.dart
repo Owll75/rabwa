@@ -16,7 +16,7 @@ class AppointmentDatasource {
         final data = doc.data();
 
         return Appointment(
-            date: data['date'] ?? '',
+            appointment_date: data['date'] ?? '',
             location: data['location'] ?? '',
             time: data['time'] ?? '',
             title: (data['title'] ?? ''));

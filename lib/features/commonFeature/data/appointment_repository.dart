@@ -40,9 +40,8 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perent_id', isEqualTo: parentId)
+          .where('perent_id', isEqualTo: parentId).where('active', isEqualTo: true)
           .get();
-
       return snapshot.docs
           .map((doc) => Appointment.fromMap(
               doc.data() as Map<String, dynamic>? ?? {}, doc.id))

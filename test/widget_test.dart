@@ -1,30 +1,49 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:rabwa/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rabwa/theme.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget( MyApp());
+  group('RiverThemeDarkModel', () {
+    test('Initial state is false', () {
+      // Arrange
+      final model = RiverThemeDarkModel();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Act & Assert
+      expect(model.isDark, false);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('Toggling dark mode updates the state', () {
+      // Arrange
+      final model = RiverThemeDarkModel();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Act
+      model.toggleDark();
+
+      // Assert
+      expect(model.isDark, true);
+
+      // Act
+      model.toggleDark();
+
+      // Assert
+      expect(model.isDark, false);
+    });
+
+    test('Setting isDark updates the state', () {
+      // Arrange
+      final model = RiverThemeDarkModel();
+
+      // Act
+      model.isDark = true;
+
+      // Assert
+      expect(model.isDark, true);
+
+      // Act
+      model.isDark = false;
+
+      // Assert
+      expect(model.isDark, false);
+    });
   });
 }

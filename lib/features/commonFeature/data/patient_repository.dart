@@ -92,7 +92,7 @@ class PatientsDatasource {
 
       // Add the unique ID to the patient data
       Map<String, dynamic> patientData = patient.toMap();
-      patientData['id'] = uniqueId;
+      patientData['id'] = uniqueId.toString();
 
       // Use the custom ID when adding the patient to the collection
       await PatientsCollection.doc(uniqueId.toString()).set(patientData);

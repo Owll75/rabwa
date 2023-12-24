@@ -33,7 +33,7 @@ class SettingsMenu extends StatelessWidget {
               },
             ),
             SettingsTile(
-              icon: Icons.child_care,
+              icon: Icons.face,
               title: 'Children',
               subtitle: 'Manage your linked Children',
               onTap: () => {

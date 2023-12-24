@@ -27,7 +27,9 @@ class AppointmentreqPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No appointments found.');
+            return const Center(
+                child: Text(
+                    'No appointments found'));
           } else {
             List<Appointment> appointments = snapshot.data!;
             return ListView.builder(

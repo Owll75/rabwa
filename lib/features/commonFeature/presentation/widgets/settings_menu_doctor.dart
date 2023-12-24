@@ -23,7 +23,7 @@ class SettingsMenuDoctor extends StatelessWidget {
           context: context,
           tiles: [
             SettingsTile(
-              icon: Icons.child_care,
+              icon: Icons.face,
               title: 'My Patient',
               subtitle: 'Manage My Patient',
               onTap: () => {

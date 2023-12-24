@@ -64,7 +64,7 @@ class Appointment {
       doctorId: map['doctorId'] as String?,
       location: map['location'] as String?,
       patientId: map['patientid'] as String?,
-      parentId: map['perentId'] as String?,
+      parentId: map['parentId'] as String?,
       time: map['time'] as String?,
       title: map['title'] as String?,
       parentName: map['parentName'] as String?,

@@ -56,7 +56,7 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId_(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perentId', isEqualTo: parentId)
+          .where('parentId', isEqualTo: parentId)
           .where('active', isEqualTo: false)
           .get();
       return snapshot.docs
@@ -72,7 +72,7 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perentId', isEqualTo: parentId)
+          .where('parentId', isEqualTo: parentId)
           .where('active', isEqualTo: true)
           .get();
       return snapshot.docs
@@ -98,7 +98,7 @@ class AppointmentsDatasource {
   Future<bool> doesAppointmentExistWithParentId(String parentId) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Appointments')
-        .where('parent_id', isEqualTo: parentId)
+        .where('parentId', isEqualTo: parentId)
         .limit(1)
         .get();
 

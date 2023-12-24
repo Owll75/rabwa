@@ -42,8 +42,9 @@ class _ChildrenPageState extends State<ChildrenPage> {
             // If there's an error
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // If there is no data
-            return const Text('No Children found.');
+            return const Center(
+                child: Text(
+                    'No children found'));
           } else {
             // If data is available, display it
             List<Patient> patients = snapshot.data!;

@@ -56,7 +56,7 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId_(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perentId', isEqualTo: parentId)
+          .where('parentId', isEqualTo: parentId)
           .where('active', isEqualTo: false)
           .get();
       return snapshot.docs
@@ -72,7 +72,7 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getAppointmentsByParentId(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perentId', isEqualTo: parentId)
+          .where('parentId', isEqualTo: parentId)
           .where('active', isEqualTo: true)
           .get();
       return snapshot.docs

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Appointment {
   String? id; // created by firebase
   bool? active; // assign it false
-  DateTime? submitDate; // the current date at the time of submission
+  String? submitDate; // the current date at the time of submission
   String? doctorId; // The assigned Doctor to the patient in databse
   String? parentName; // the user "name" field saved in users collection
   String? parentId; // the user "id" field saved in users collection
@@ -25,7 +25,7 @@ class Appointment {
 
   String? patientGender; // the "id" field saveed in the "Patient" Collection
 
-  DateTime? appointmentDate; // Abdulellah
+  String? appointmentDate; // Abdulellah
   String? location; // Abdulellah
   String? time; // Abdullellah
   String? title; // ??
@@ -59,11 +59,13 @@ class Appointment {
   factory Appointment.fromMap(Map<String, dynamic> map, String id) {
     return Appointment(
       id: id,
-      submitDate: (map['submit_date'] as Timestamp?)?.toDate(),
-      appointmentDate: (map['appointment_date'] as Timestamp?)?.toDate(),
+      // submitDate: (map['submit_date'] as Timestamp?)?.toDate(),
+      // appointmentDate: (map['appointment_date'] as Timestamp?)?.toDate(),
+      submitDate: map['submitDate'] as String?,
+      appointmentDate: map['submitDate'] as String?,
       doctorId: map['doctorId'] as String?,
       location: map['location'] as String?,
-      patientId: map['patientid'] as String?,
+      patientId: map['patientId'] as String?,
       parentId: map['perentId'] as String?,
       time: map['time'] as String?,
       title: map['title'] as String?,
@@ -89,8 +91,8 @@ class Appointment {
 
   Map<String, dynamic> toMap() {
     return {
-      'submit_date': Timestamp.fromDate(submitDate ?? DateTime.now()),
-      'appointment_date': Timestamp.fromDate(appointmentDate ?? DateTime.now()),
+      // 'submit_date': Timestamp.fromDate(submitDate ?? DateTime.now()),
+      // 'appointment_date': Timestamp.fromDate(appointmentDate ?? DateTime.now()),
       'doctor_id': doctorId,
       'location': location,
       'patient_id': patientId,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 // import 'asthma_score.dart';
 
@@ -39,6 +40,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
       _answers.containsKey(key)
           ? _answers[key] = value
           : _additionalAnswers[key] = value;
+
       // If an answer is set, clear validation error if it exists
       if (_validationErrors.containsKey(key)) {
         _validationErrors.remove(key);
@@ -88,7 +90,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
         Appointment newAppointment = Appointment(
           active: false,
-          submitDate: DateTime.now(),
+          submitDate: DateFormat('yyyy-MM-dd – kk:mm').format(now),
           doctorId: selectedPatientData['doctor_id'],
           parentName: parentData['name'],
           parentId: parentData['id'],
@@ -101,8 +103,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ac2: _answers['AC2'].toString(),
           ac3: _answers['AC3'].toString(),
           ac4: _answers['AC4'].toString(),
-          ac5: _answers['AC5'].toString(),
-          ac6: _answers['AC6'].toString(),
+          ac5: _additionalAnswers['AC5'].toString(),
+          ac6: _additionalAnswers['AC6'].toString(),
         );
 
         // Save the new appointment to Firestore
@@ -172,10 +174,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
     return userDoc.data() as Map<String, dynamic>;
   }
 
+  DateTime now = DateTime.now();
   Future<void> _saveAppointment(Appointment appointment) async {
     await FirebaseFirestore.instance.collection('Appointments').add({
       'active': appointment.active,
-      'submitDate': appointment.submitDate,
+      'submitDate': DateFormat('yyyy-MM-dd – kk:mm').format(now),
       'doctorId': appointment.doctorId,
       'parentName': appointment.parentName,
       'parentId': user!.uid,

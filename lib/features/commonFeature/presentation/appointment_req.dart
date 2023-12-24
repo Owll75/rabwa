@@ -40,6 +40,7 @@ class AppointmentreqPage extends StatelessWidget {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 Appointment appointment = appointments[index];
+                // Turn it to widget **
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
@@ -50,7 +51,7 @@ class AppointmentreqPage extends StatelessWidget {
                         '${appointment.patientName} - (${appointment.patientId})'),
                     subtitle: Text(
                       'Age: ${appointment.patientAge}\n'
-                      'Submitted on: ${DateFormat.yMd().add_jm().format(appointment.submitDate!)}',
+                      'Submitted on: ${appointment.submitDate}',
                     ),
                   ),
                 );

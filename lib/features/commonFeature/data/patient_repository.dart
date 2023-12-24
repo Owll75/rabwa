@@ -6,7 +6,6 @@ import 'package:rabwa/features/commonFeature/domain/patient.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 
 
-
 class PatientsDatasource {
   final CollectionReference PatientsCollection =
       FirebaseFirestore.instance.collection('Patient');
@@ -159,12 +158,11 @@ class PatientsDatasource {
   }
   Future<RichText> reviewAppointmentDetails(String patientId) async {
     try {
-      // Fetch the appointment details
       final QuerySnapshot<Map<String, dynamic>> appointmentSnapshot = await FirebaseFirestore
           .instance
           .collection('Appointments')
-          .where('patient_id', isEqualTo: patientId)
-          .limit(1)
+          .where('patientId', isEqualTo: patientId)
+          .limit(100)
           .get();
 
       if (appointmentSnapshot.docs.isEmpty) {
@@ -172,23 +170,19 @@ class PatientsDatasource {
       }
 
       final Appointment appointment = Appointment.fromMap(appointmentSnapshot.docs.first.data() as Map<String, dynamic>, appointmentSnapshot.docs.first.id);
-
-      final QuerySnapshot medicineSnapshot = await medicinesCollection.where('patient_id', isEqualTo: appointment.patientId).get();
+      final QuerySnapshot medicineSnapshot = await medicinesCollection.where('patientId', isEqualTo: appointment.patientId).get();
       final List<Medicine> medicines = medicineSnapshot.docs.map((doc) => Medicine.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
 
-      String medicationDetails = medicines.map((med) => "${med.name} (${med.dose})").join(", ");
       String asthmaControlLevel = appointment.getAsthmaControlLevel();
       String questionsAnsweredYes = appointment.getQuestionsAnswered();
-
+      String doseLevel = appointment.getDoseLevel();
+      String? submittedTime = appointment.time;
       return RichText(
         text: TextSpan(
           style: TextStyle(fontSize: 14, color: Colors.black),
           children: <TextSpan>[
             TextSpan(
-              text: '${appointment.patientAge} year old ${appointment.patientGender} patient, known case of asthma, currently on $medicationDetails.',
-            ),
-            TextSpan(
-              text: '\n\nFollowing up for asthma assessment and management.\n',
+              text: 'Following up for asthma assessment:\n\n',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextSpan(
@@ -202,21 +196,16 @@ class PatientsDatasource {
               text: ' $asthmaControlLevel asthma',
             ),
             TextSpan(
-              text: '\n\nPlan:',
+              text: '\n\nPlan: ',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextSpan(
-              text: ' - As per the guidelines\n',
+              text: doseLevel,
             ),
-            // Here you would include additional details as needed
-            // For example, location, time of appointment, doctor's notes, etc.
-            // These details would need to be part of the Appointment object or retrieved from the database
           ],
         ),
       );
     } catch (e) {
-      print('Error reviewing appointment details: $e');
-      // Handle the error state, perhaps return an error widget
       return RichText(
         text: TextSpan(
           text: 'Error: Could not load appointment details.',

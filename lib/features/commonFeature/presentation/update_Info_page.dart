@@ -31,7 +31,8 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
 
   void setUserInfo() async {
     _nameController.text = widget.userData.name;
-    _phoneController.text = widget.userData.phone;
+    _phoneController.text =
+        widget.userData.phone == "Nan" ? "" : widget.userData.phone;
 
     // });
   }
@@ -113,6 +114,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
+                          labelText: 'Username',
                           filled: true,
                           fillColor: Colors.white,
                           border: InputBorder.none,
@@ -154,6 +156,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                         keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
+                          labelText: 'Phone',
                           filled: true,
                           fillColor: Colors.white,
                           border: InputBorder.none,

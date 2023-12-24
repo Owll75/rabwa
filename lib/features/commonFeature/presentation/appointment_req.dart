@@ -48,7 +48,7 @@ class AppointmentreqPage extends StatelessWidget {
                       child: Text(appointment.patientName![0]),
                     ),
                     title: Text(
-                        '${appointment.patientName} - (${appointment.patientId})'),
+                        '${appointment.patientName} - ${appointment.patientId}'),
                     subtitle: Text(
                       'Age: ${appointment.patientAge}\n'
                       'Submitted on: ${appointment.submitDate}',

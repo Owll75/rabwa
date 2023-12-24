@@ -59,8 +59,6 @@ class Appointment {
   factory Appointment.fromMap(Map<String, dynamic> map, String id) {
     return Appointment(
       id: id,
-      // submitDate: (map['submit_date'] as Timestamp?)?.toDate(),
-      // appointmentDate: (map['appointment_date'] as Timestamp?)?.toDate(),
       submitDate: map['submitDate'] as String?,
       appointmentDate: map['submitDate'] as String?,
       doctorId: map['doctorId'] as String?,
@@ -91,8 +89,8 @@ class Appointment {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'submit_date': Timestamp.fromDate(submitDate ?? DateTime.now()),
-      // 'appointment_date': Timestamp.fromDate(appointmentDate ?? DateTime.now()),
+      'submit_date': submitDate,
+      'appointment_date': appointmentDate,
       'doctor_id': doctorId,
       'location': location,
       'patient_id': patientId,
@@ -104,12 +102,12 @@ class Appointment {
       'patient_gender': patientGender,
       'patient_weight': patientWeight,
       'patient_height': patientHeight,
-      'ac1': ac1,
-      'ac2': ac2,
-      'ac3': ac3,
-      'ac4': ac4,
-      'ac5': ac5,
-      'ac6': ac6,
+      'AC1': ac1,
+      'AC2': ac2,
+      'AC3': ac3,
+      'AC4': ac4,
+      'AC5': ac5,
+      'AC6': ac6,
       'report': report,
       'active': active,
     };
@@ -117,10 +115,10 @@ class Appointment {
 
   int calculateAsthmaControlScore() {
     int score = 0;
-    score += ac1 == "Yes" ? 1 : 0;
-    score += ac2 == "Yes" ? 1 : 0;
-    score += ac3 == "Yes" ? 1 : 0;
-    score += ac4 == "Yes" ? 1 : 0;
+    score += ac1 == "true" ? 1 : 0;
+    score += ac2 == "true" ? 1 : 0;
+    score += ac3 == "true" ? 1 : 0;
+    score += ac4 == "true" ? 1 : 0;
     return score;
   }
 
@@ -135,6 +133,15 @@ class Appointment {
     }
   }
 
+  String getDoseLevel() {
+    int score = calculateAsthmaControlScore();
+    if (score == 0) {
+      return 'Step down the current medications. Follow up after 3 months.';
+    } else {
+      return 'Step Up the current medication. Follow up after 2-3 months.';
+    }
+  }
+
   bool shouldContinueSurvey() {
     int score = calculateAsthmaControlScore();
     return score >= 3;
@@ -142,13 +149,22 @@ class Appointment {
 
   String getQuestionsAnswered() {
     List<String> questionsAnswered = [];
-    if (ac1 == "Yes") questionsAnswered.add("AC1: Yes");
-    if (ac2 == "Yes") questionsAnswered.add("AC2: Yes");
-    if (ac3 == "Yes") questionsAnswered.add("AC3: Yes");
-    if (ac4 == "Yes") questionsAnswered.add("AC4: Yes");
+    if (ac1 == "true")
+      questionsAnswered.add("More than twice a week daytime symptoms? true\n");
+    if (ac2 == "true")
+      questionsAnswered.add("Woke up in the night due to symptoms? true\n");
+    if (ac3 == "true")
+      questionsAnswered
+          .add("Used their reliever inhaler more than twice a week? true\n");
+    if (ac4 == "true")
+      questionsAnswered.add("Activity limitations due to symptoms? true\n");
     if (shouldContinueSurvey()) {
-      if (ac5 != null) questionsAnswered.add("AC5: $ac5");
-      if (ac6 != null) questionsAnswered.add("AC6: $ac6");
+      if (ac5 != null)
+        questionsAnswered.add(
+            "Did your child adhered to the inhaler regimen as prescribed? $ac5\n");
+      if (ac6 != null)
+        questionsAnswered.add(
+            "Did you make sure your child avoids exposure to their allergic triggers? $ac6");
     }
     return questionsAnswered.join('\n');
   }

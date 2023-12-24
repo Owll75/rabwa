@@ -247,7 +247,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
       case 'AC4':
         return 'Activity limitations due to symptoms?';
       case 'AC5':
-        return "How was your child's adherence to the inhaler?";
+        return "Did your child adhered to the inhaler regimen as prescribed?";
       case 'AC6':
         return 'Did you make sure your child avoids exposure to their allergic triggers?';
       default:
@@ -358,40 +358,3 @@ class _AppointmentFormState extends State<AppointmentForm> {
         ));
   }
 }
-
-
-
-
-
-  
-  // void _onSubmit() {
-  //   // Reset validation errors
-  //   setState(() {
-  //     _validationErrors.clear();
-  //   });
-
-  //   bool hasUnansweredQuestions = _answers.containsValue(null) ||
-  //       (_isAdditionalQuestionsVisible &&
-  //           _additionalAnswers.containsValue(null));
-
-  //   if (hasUnansweredQuestions) {
-  //     setState(() {
-  //       _answers.forEach((key, value) {
-  //         if (value == null) {
-  //           _validationErrors[key] = 'Please answer this question';
-  //         }
-  //       });
-
-  //       if (_isAdditionalQuestionsVisible) {
-  //         _additionalAnswers.forEach((key, value) {
-  //           if (value == null) {
-  //             _validationErrors[key] = 'Please answer this question';
-  //           }
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     // All questions answered, process the answers
-  //     Navigator.of(context).pop();
-  //   }
-  // }

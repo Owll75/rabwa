@@ -15,6 +15,7 @@ import 'package:rabwa/features/commonFeature/presentation/profile_page.dart';
 import 'package:rabwa/theme.dart';
 import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import './features/commonFeature/presentation/note.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,30 +128,34 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo> {
   Scaffold _buildScaffold(bool isDoctor) {
     List<Widget> _pages = isDoctor
         ? [
-            AppointmentsPage(),
+            // AppointmentsPage(),
             PatientPage(),
+            // NotePage(),
             ProfilePageDoctor(),
           ]
         : [
-            /* Other pages for regular users */ AppointmentsPage(),
+            // /* Other pages for regular users */ AppointmentsPage(),
             AppointmentreqPage(),
             ProfilePage()
-
           ];
 
     List<BottomNavigationBarItem> _navItems = isDoctor
         ? [
+            // const BottomNavigationBarItem(
+            //     icon: Icon(Icons.calendar_today), label: 'Appointments'),
             const BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today), label: 'Appointments'),
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.person), label: 'Patients'),
+                icon: Icon(Icons.medical_information_outlined),
+                label: 'Patients'),
+            // const BottomNavigationBarItem(
+            //     icon: Icon(Icons.note), label: 'Notes'),
             const BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline), label: 'Profile')
           ]
         : [
+            // const BottomNavigationBarItem(
+            //     icon: Icon(Icons.calendar_today), label: 'Appointments'),
             const BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today), label: 'Appointments'),
-            const BottomNavigationBarItem( icon: Icon(Icons.add), label: 'New Appointment'),
+                icon: Icon(Icons.calendar_today), label: ' Appointments'),
             const BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline), label: 'Profile'),
           ];

@@ -21,7 +21,7 @@ class AppointmentreqPage extends StatelessWidget {
       body: FutureBuilder<List<Appointment>>(
         future: fetchUserId(user!.uid).then((userId) {
           if (userId != null) {
-            return AppointmentsDatasource().getAppointmentsByParentId__(userId);
+            return AppointmentsDatasource().getAppointmentsByParentId_(userId);
           } else {
             throw Exception('User ID not found.');
           }

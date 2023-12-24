@@ -178,7 +178,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
       'submitDate': appointment.submitDate,
       'doctorId': appointment.doctorId,
       'parentName': appointment.parentName,
-      'parentId': appointment.parentId,
+      'parentId': user!.uid,
       'patientId': appointment.patientId,
       'patientName': appointment.patientName,
       'patientAge': appointment.patientAge,

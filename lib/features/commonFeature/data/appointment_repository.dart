@@ -70,10 +70,26 @@ class AppointmentsDatasource {
     }
   }
 
+  Future<List<Appointment>> getAppointmentsByParentId_(String parentId) async {
+    try {
+      final QuerySnapshot<Object?> snapshot = await appointmentsCollection
+          .where('perentId', isEqualTo: parentId)
+          .where('active', isEqualTo: false)
+          .get();
+      return snapshot.docs
+          .map((doc) => Appointment.fromMap(
+              doc.data() as Map<String, dynamic>? ?? {}, doc.id))
+          .toList();
+    } catch (e) {
+      print('Error fetching appointments: $e');
+      return [];
+    }
+  }
+
   Future<List<Appointment>> getAppointmentsByParentId(String parentId) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('perent_id', isEqualTo: parentId)
+          .where('perentId', isEqualTo: parentId)
           .where('active', isEqualTo: true)
           .get();
       return snapshot.docs

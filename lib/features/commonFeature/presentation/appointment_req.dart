@@ -5,6 +5,7 @@ import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 import 'appointment_form.dart'; // Update this import as needed
 import 'package:rabwa/features/commonFeature/data/appointment_repository.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentreqPage extends StatelessWidget {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,18 +19,20 @@ class AppointmentreqPage extends StatelessWidget {
         title: const Text('Appointments Requests'),
       ),
       body: FutureBuilder<List<Appointment>>(
-        // Changed to List<Appointment>
-        future: AppointmentsDatasource().getMyAppointments(
-            user!.uid), // Ensure that AppointmentsDatasource is instantiated
+        future: fetchUserId(user!.uid).then((userId) {
+          if (userId != null) {
+            return AppointmentsDatasource().getAppointmentsByParentId__(userId);
+          } else {
+            throw Exception('User ID not found.');
+          }
+        }),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-                child: Text(
-                    'No appointments found'));
+            return const Text('Yoe have no waiting requests');
           } else {
             List<Appointment> appointments = snapshot.data!;
             return ListView.builder(
@@ -39,15 +42,14 @@ class AppointmentreqPage extends StatelessWidget {
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    // Modify this part to display appointment details
-                    // For example, using appointment.title or appointment.time
                     leading: CircleAvatar(
-                      child: Text(appointment
-                          .patientName![0]), // Assuming patientName is not null
+                      child: Text(appointment.patientName![0]),
                     ),
-                    title: Text(appointment.patientName ?? 'Unnamed patient'),
+                    title: Text(
+                        '${appointment.patientName} - (${appointment.patientId})'),
                     subtitle: Text(
-                      'Appointment Date: ${appointment.appointmentDate} | Location: ${appointment.location}',
+                      'Age: ${appointment.patientAge}\n'
+                      'Submitted on: ${DateFormat.yMd().add_jm().format(appointment.submitDate!)}',
                     ),
                   ),
                 );
@@ -64,6 +66,7 @@ class AppointmentreqPage extends StatelessWidget {
     );
   }
 
+// Check that the user is Signed In
   void _validateAndNavigate(BuildContext context) async {
     if (user == null) {
       _showValidationAlert(context,
@@ -72,16 +75,18 @@ class AppointmentreqPage extends StatelessWidget {
     }
 
     try {
+      // Retrieve all patients related to the user (Father).
       var patientDocs = await firestore
-          .collection('Patients')
-          .where('parentID', isEqualTo: user!.uid)
+          .collection('Patient')
+          .where('parent_id', isEqualTo: user!.uid)
           .get();
 
       if (patientDocs.docs.isEmpty) {
         _showValidationAlert(context,
             'You have not added any children yet. Please add your children to proceed.');
       } else if (patientDocs.docs.any((doc) =>
-          doc.data()['docid'] == null || doc.data()['docid'].isEmpty)) {
+          // Check if there i a doctor
+          doc.data()['doctor_id'] == null || doc.data()['doctor_id'].isEmpty)) {
         _showValidationAlert(
             context, 'A doctor has not been assigned to any of your children.');
       } else {
@@ -112,5 +117,17 @@ class AppointmentreqPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  ///
+  Future<String?> fetchUserId(String userUid) async {
+    var docSnapshot =
+        await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+
+    if (docSnapshot.exists && docSnapshot.data()!.containsKey('id')) {
+      return docSnapshot.data()!['id'] as String?;
+    } else {
+      return null;
+    }
   }
 }

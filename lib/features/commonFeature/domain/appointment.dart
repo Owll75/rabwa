@@ -1,32 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Appointment {
-  String id;
-  DateTime? submitDate;
-  DateTime? appointmentDate;
-  String? doctorId;
-  String? location;
-  String? patientId;
-  String? time;
-  String? title;
-  String? parentName;
-  String? parentId;
-  String? patientName;
-  int? patientAge;
-  String? patientGender;
-  double? patientWeight;
-  double? patientHeight;
-  String? ac1;
-  String? ac2;
-  String? ac3;
-  String? ac4;
-  String? ac5;
-  String? ac6;
+  String? id; // created by firebase
+  bool? active; // assign it false
+  DateTime? submitDate; // the current date at the time of submission
+  String? doctorId; // The assigned Doctor to the patient in databse
+  String? parentName; // the user "name" field saved in users collection
+  String? parentId; // the user "id" field saved in users collection
+
+  String? patientId; // the "id" field saveed in the "Patient" Collection
+  String? patientName; // the "name" field saveed in the "Patient" Collection
+  int? patientAge; // the "age" field saveed in the "Patient" Collection
+  double?
+      patientWeight; // the "weight" field saveed in the "Patient" Collection
+  double?
+      patientHeight; // the "height" field saveed in the "Patient" Collection
+
+  String? ac1; // question 1
+  String? ac2; // question 2
+  String? ac3; // question 3
+  String? ac4; // question 4
+  String? ac5; // question 5
+  String? ac6; // question 6
+
+  String? patientGender; // the "id" field saveed in the "Patient" Collection
+
+  DateTime? appointmentDate; // Abdulellah
+  String? location; // Abdulellah
+  String? time; // Abdullellah
+  String? title; // ??
   String? report;
-  bool? active;
 
   Appointment(
-      {this.id = '',
+      {this.id,
       this.submitDate,
       this.appointmentDate,
       this.doctorId,
@@ -106,6 +112,7 @@ class Appointment {
       'active': active,
     };
   }
+
   int calculateAsthmaControlScore() {
     int score = 0;
     score += ac1 == "Yes" ? 1 : 0;

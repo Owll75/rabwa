@@ -24,30 +24,13 @@ class AppointmentsDatasource {
   Future<List<Appointment>> getMyAppointments(String doctorID) async {
     try {
       final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('doctor_id', isEqualTo: doctorID)
+          .where('doctorId', isEqualTo: doctorID)
           .get();
 
       return snapshot.docs
           .map((doc) => Appointment.fromMap(
               doc.data() as Map<String, dynamic>? ?? {}, doc.id))
           .toList(); // toList() should be here, after the map operation.
-    } catch (e) {
-      print('Error fetching appointments: $e');
-      return [];
-    }
-  }
-
-  Future<List<Appointment>> getAppointmentsByParentId__(String parentId) async {
-    try {
-      final QuerySnapshot<Object?> snapshot = await appointmentsCollection
-          .where('parentId', isEqualTo: parentId)
-          .where('active', isEqualTo: false)
-          .get();
-
-      return snapshot.docs
-          .map((doc) => Appointment.fromMap(
-              doc.data() as Map<String, dynamic>? ?? {}, doc.id))
-          .toList();
     } catch (e) {
       print('Error fetching appointments: $e');
       return [];

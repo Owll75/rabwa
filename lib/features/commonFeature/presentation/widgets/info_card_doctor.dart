@@ -24,7 +24,6 @@ class _InfoCardState extends State<InfoCardDoctor> {
         child: Row(
           children: <Widget>[
             CircleAvatar(
-              backgroundColor: Colors.grey.shade300,
               child: Text(widget
                   .doctor.name![0]), // Displays the first letter of the name
             ),

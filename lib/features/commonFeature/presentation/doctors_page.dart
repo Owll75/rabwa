@@ -21,8 +21,9 @@ class DoctorsPage extends StatelessWidget {
             // If there's an error
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // If there is no data
-            return Text('No doctors found.');
+            return const Center(
+                child: Text(
+                    'No doctor found'));
           } else {
             // If data is available, display it
             List<Doctor> doctors = snapshot.data!;

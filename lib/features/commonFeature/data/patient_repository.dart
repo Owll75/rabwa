@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:rabwa/features/commonFeature/domain/medicine.dart';
 import 'package:rabwa/features/commonFeature/domain/patient.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class PatientsDatasource {
   final CollectionReference PatientsCollection =
       FirebaseFirestore.instance.collection('Patient');
   final CollectionReference appointmentsCollection =
-    FirebaseFirestore.instance.collection('Appointment');
+      FirebaseFirestore.instance.collection('Appointment');
   final CollectionReference medicinesCollection =
-    FirebaseFirestore.instance.collection('Medicine');
+      FirebaseFirestore.instance.collection('Medicine');
 
   Future<List<Patient>> getPatients() async {
     try {
@@ -95,7 +95,8 @@ class PatientsDatasource {
   Future<void> addPatient(Patient patient) async {
     try {
       // Generate a unique ID starting from 10000
-      int uniqueId = 10000 + Random().nextInt(90000); // Random number between 10000 and 99999
+      int uniqueId = 10000 +
+          Random().nextInt(90000); // Random number between 10000 and 99999
 
       // Add the unique ID to the patient data
       Map<String, dynamic> patientData = patient.toMap();
@@ -103,7 +104,7 @@ class PatientsDatasource {
 
       // Use the custom ID when adding the patient to the collection
       await PatientsCollection.doc(uniqueId.toString()).set(patientData);
-      
+
       print('Patient added successfully with ID: $uniqueId');
     } catch (e) {
       print('Error adding patient: $e');
@@ -156,22 +157,30 @@ class PatientsDatasource {
       print('Error updating patient: $e');
     }
   }
+
   Future<RichText> reviewAppointmentDetails(String patientId) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> appointmentSnapshot = await FirebaseFirestore
-          .instance
-          .collection('Appointments')
-          .where('patientId', isEqualTo: patientId)
-          .limit(100)
-          .get();
+      final QuerySnapshot<Map<String, dynamic>> appointmentSnapshot =
+          await FirebaseFirestore.instance
+              .collection('Appointments')
+              .where('patientId', isEqualTo: patientId)
+              .limit(100)
+              .get();
 
       if (appointmentSnapshot.docs.isEmpty) {
         throw Exception("Appointment for this patient is not found");
       }
 
-      final Appointment appointment = Appointment.fromMap(appointmentSnapshot.docs.first.data() as Map<String, dynamic>, appointmentSnapshot.docs.first.id);
-      final QuerySnapshot medicineSnapshot = await medicinesCollection.where('patientId', isEqualTo: appointment.patientId).get();
-      final List<Medicine> medicines = medicineSnapshot.docs.map((doc) => Medicine.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+      final Appointment appointment = Appointment.fromMap(
+          appointmentSnapshot.docs.first.data() as Map<String, dynamic>,
+          appointmentSnapshot.docs.first.id);
+      final QuerySnapshot medicineSnapshot = await medicinesCollection
+          .where('patientId', isEqualTo: appointment.patientId)
+          .get();
+      final List<Medicine> medicines = medicineSnapshot.docs
+          .map((doc) =>
+              Medicine.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
 
       String asthmaControlLevel = appointment.getAsthmaControlLevel();
       String questionsAnsweredYes = appointment.getQuestionsAnswered();

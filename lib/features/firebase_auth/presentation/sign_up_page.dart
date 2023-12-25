@@ -8,6 +8,7 @@ import 'package:rabwa/features/firebase_auth/firebase_auth_services.dart';
 import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 import 'package:rabwa/features/firebase_auth/presentation/widgets/formContinter.dart';
 import 'package:rabwa/main.dart';
+import 'dart:math';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -163,16 +164,16 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (user != null) {
       if (isDoctor) {
-        Doctor doctor = Doctor(age: "33", docId: user!.uid, name: username);
+        Doctor doctor = Doctor(docId: user!.uid, name: username);
         DoctorDatasource doctorDatasource = DoctorDatasource();
         doctorDatasource.createDoctor(doctor);
       } else {
         UserData newuser = UserData(
             docId: user!.uid,
             email: email,
-            id: "765432",
+            id: generateRandomNumberString(),
             name: username,
-            phone: "NaN");
+            phone: "");
         UsersDatasource usersDatasource = UsersDatasource();
         usersDatasource.createUser(newuser);
       }
@@ -185,5 +186,17 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isSigningUp = false;
     });
+  }
+
+  //function that will generate and return a string of 5 random numbers to be used as ID
+  String generateRandomNumberString() {
+    Random random = Random();
+    String numberString = '';
+
+    for (int i = 0; i < 5; i++) {
+      numberString += random.nextInt(10).toString(); // Random digit from 0 to 9
+    }
+
+    return numberString;
   }
 }

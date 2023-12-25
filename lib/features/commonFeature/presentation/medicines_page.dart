@@ -23,8 +23,7 @@ class MedicinePage extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-                child: Text(
-                    'No medicines found for this child'));
+                child: Text('No medicines found for this child'));
           } else {
             List<Medicine> medicines = snapshot.data!;
             return ListView.builder(

@@ -16,7 +16,8 @@ class _PatientPageState extends State<PatientPage> {
   FirebaseFirestore? instance;
 
   User? user = FirebaseAuth.instance.currentUser;
-
+  String formattedDate =
+      DateTime.now().toString().substring(0, 10); // YYYY-MM-DD format
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,11 +43,21 @@ class _PatientPageState extends State<PatientPage> {
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     leading: CircleAvatar(
-                      child: Text(patient.name![0]), // Assuming patient name is not null here
+                      child: Text(patient
+                          .name![0]), // Assuming patient name is not null here
                     ),
                     title: Text(patient.name ?? 'Unnamed patient'),
                     subtitle: Text(
-                      'Age: ${patient.age} | Weight: ${patient.weight} kg | Height: ${patient.height} cm',
+                      'Age: ${patient.age} \nWeight: ${patient.weight} kg | Height: ${patient.height} cm \nSubmitted Date: $formattedDate',
+                      style: TextStyle(
+                        fontSize: 16, // Sets the size of the font
+                        fontWeight:
+                            FontWeight.w500, // Sets the weight of the font
+                        color: Colors.blueGrey, // Sets the color of the text
+                        letterSpacing:
+                            0.5, // Adjusts letter spacing for better readability
+                      ),
+                      textAlign: TextAlign.left, // Aligns text to the left
                     ),
                     onTap: () async {
                       // Assuming patient ID is stored in patient.docId
@@ -56,29 +67,36 @@ class _PatientPageState extends State<PatientPage> {
                         builder: (BuildContext context) {
                           // Use FutureBuilder to wait for the async operation to complete
                           return FutureBuilder<RichText>(
-                            future: patientsDatasourceDatasource.reviewAppointmentDetails(patient.docId!),
-                            builder: (BuildContext context, AsyncSnapshot<RichText> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                            future: patientsDatasourceDatasource
+                                .reviewAppointmentDetails(patient.docId!),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<RichText> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return AlertDialog(
                                   content: SizedBox(
                                     height: 100,
-                                    child: Center(child: CircularProgressIndicator()),
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
                                   ),
                                 );
                               } else if (snapshot.hasError) {
                                 return AlertDialog(
                                   title: Text('Error'),
-                                  content: Text('Could not load details: ${snapshot.error}'),
+                                  content: Text(
+                                      'Could not load details: ${snapshot.error}'),
                                 );
                               } else if (snapshot.hasData) {
                                 return AlertDialog(
                                   title: Text('Appointment Details'),
-                                  content: SingleChildScrollView(child: snapshot.data!),
+                                  content: SingleChildScrollView(
+                                      child: snapshot.data!),
                                 );
                               } else {
                                 return AlertDialog(
                                   title: Text('No Data'),
-                                  content: Text('No details are available for this patient.'),
+                                  content: Text(
+                                      'No details are available for this patient.'),
                                 );
                               }
                             },
@@ -115,52 +133,51 @@ class _PatientPageState extends State<PatientPage> {
   }
 }
 
+void showAddDialog(
+    BuildContext context, String actionLabel, Function(String) onAddAction) {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String inputId = '';
 
-  void showAddDialog(
-      BuildContext context, String actionLabel, Function(String) onAddAction) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    String inputId = '';
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Add $actionLabel"),
-          content: Form(
-            key: _formKey,
-            child: TextFormField(
-              decoration: InputDecoration(labelText: '$actionLabel ID'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter an ID';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                inputId = value!;
-              },
-            ),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Add $actionLabel"),
+        content: Form(
+          key: _formKey,
+          child: TextFormField(
+            decoration: InputDecoration(labelText: '$actionLabel ID'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an ID';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              inputId = value!;
+            },
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Add'),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  // Call the provided action with the input ID
-                  onAddAction(inputId);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Add'),
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                // Call the provided action with the input ID
+                onAddAction(inputId);
                 Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+              }
+            },
+          ),
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

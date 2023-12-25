@@ -9,13 +9,11 @@ import 'package:rabwa/features/firebase_auth/presentation/login_page.dart';
 import 'package:rabwa/features/commonFeature/domain/appointment.dart';
 import 'package:rabwa/features/commonFeature/presentation/appointments_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/doctors_page.dart';
-import 'package:rabwa/features/commonFeature/presentation/medicines_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/patients_page.dart';
 import 'package:rabwa/features/commonFeature/presentation/profile_page.dart';
 import 'package:rabwa/theme.dart';
 import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import './features/commonFeature/presentation/note.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

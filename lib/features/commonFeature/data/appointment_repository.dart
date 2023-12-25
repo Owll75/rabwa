@@ -98,7 +98,7 @@ class AppointmentsDatasource {
   Future<bool> doesAppointmentExistWithParentId(String parentId) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Appointments')
-        .where('parent_id', isEqualTo: parentId)
+        .where('parentId', isEqualTo: parentId)
         .limit(1)
         .get();
 

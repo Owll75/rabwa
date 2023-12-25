@@ -33,7 +33,14 @@ class AppointmentreqPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('Yoe have no waiting requests');
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('You have no waiting requests'),
+                ],
+              ),
+            );
           } else {
             List<Appointment> appointments = snapshot.data!;
             return ListView.builder(
@@ -47,8 +54,7 @@ class AppointmentreqPage extends StatelessWidget {
                     leading: CircleAvatar(
                       child: Text(appointment.patientName![0]),
                     ),
-                    title: Text(
-                        '${appointment.patientName} - ${appointment.patientId}'),
+                    title: Text('${appointment.patientName}'),
                     subtitle: Text(
                       'Age: ${appointment.patientAge}\n'
                       'Submitted on: ${appointment.submitDate}',
@@ -72,7 +78,7 @@ class AppointmentreqPage extends StatelessWidget {
   void _validateAndNavigate(BuildContext context) async {
     if (user == null) {
       _showValidationAlert(context,
-          'You are not logged in. Please log in to add and manage patients.');
+          'You are not logged in.\nPlease log in to add and manage patients.');
       return;
     }
 
@@ -85,7 +91,7 @@ class AppointmentreqPage extends StatelessWidget {
 
       if (patientDocs.docs.isEmpty) {
         _showValidationAlert(context,
-            'You have not added any children yet. Please add your children to proceed.');
+            'You have not added any children yet.\nPlease add your children to proceed.');
       } else if (patientDocs.docs.any((doc) =>
           // Check if there i a doctor
           doc.data()['doctor_id'] == null || doc.data()['doctor_id'].isEmpty)) {

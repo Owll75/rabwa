@@ -32,7 +32,14 @@ class _PatientPageState extends State<PatientPage> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No patients found.');
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('No patients found.'),
+                ],
+              ),
+            );
           } else {
             List<Patient> patients = snapshot.data!;
             return ListView.builder(
